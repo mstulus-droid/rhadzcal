@@ -3,42 +3,86 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>RHADZOR Calendar PRO v3</title>
+    <title>RHADZOR Calendar PRO v10 - Final Adaptive</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    screens: {
+                        'lg': '1024px',
+                    }
+                }
+            }
+        }
+    </script>
     <style>
         :root {
             --premium-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
             --gold-gradient: linear-gradient(135deg, #d97706 0%, #fbbf24 100%);
             --romance-gradient: linear-gradient(135deg, #be185d 0%, #ec4899 100%);
-            --accent-blue: #3b82f6;
             --bg-slate: #f1f5f9;
         }
 
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #e2e8f0;
+            background-color: #cbd5e1;
             margin: 0;
             padding: 0;
             display: flex;
             justify-content: center;
-            height: 100dvh;
+            height: 100vh;
             overflow: hidden;
             user-select: none;
             -webkit-tap-highlight-color: transparent;
         }
 
+        /* --- CONTAINER UTAMA --- */
         .app-container {
             width: 100%;
-            max-width: 448px;
+            height: 100%;
             background: #f8fafc;
             display: flex;
             flex-direction: column;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.2);
             position: relative;
+            transition: all 0.3s ease;
         }
 
+        @media (max-width: 1023px) {
+            .app-container {
+                max-width: 448px;
+                box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.2);
+            }
+            .desktop-sidebar, .desktop-header-controls { display: none; }
+            body { align-items: flex-start; }
+        }
+
+        @media (min-width: 1024px) {
+            body {
+                align-items: center;
+                background-image: url('https://images.unsplash.com/photo-1497864149936-d466327778cd?q=80&w=2070&auto=format&fit=crop');
+                background-size: cover;
+                background-position: center;
+                backdrop-filter: blur(8px);
+            }
+            .app-container {
+                max-width: 1400px;
+                height: 90vh;
+                max-height: 900px;
+                flex-direction: row;
+                border-radius: 24px;
+                overflow: hidden;
+                box-shadow: 0 50px 100px -20px rgba(0,0,0,0.5);
+                background: rgba(255, 255, 255, 0.95);
+            }
+            .header-rhadzor, .footer-rhadzor, .btn-floating-search { display: none !important; }
+            .desktop-sidebar { display: flex !important; }
+            .desktop-right-panel { display: flex !important; }
+        }
+
+        /* --- COMPONENTS --- */
         .header-rhadzor {
             background: var(--premium-gradient);
             padding: 0 1rem;
@@ -46,114 +90,37 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            position: relative;
             z-index: 20;
             height: 70px;
+            flex-shrink: 0;
         }
 
-        .header-left, .header-right {
-            width: 44px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .header-center {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .nav-row-compact {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-        }
-
-        .month-year-title {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.25rem;
-            font-size: 1.1rem;
-            font-weight: 800;
-            letter-spacing: -0.02em;
-            white-space: nowrap;
-        }
-
-        .nav-arrow {
-            padding: 0.5rem;
-            cursor: pointer;
-            opacity: 0.6;
-            transition: opacity 0.2s;
-            font-size: 0.9rem;
-        }
+        .header-left, .header-right { width: 44px; display: flex; justify-content: center; }
+        .header-center { flex: 1; display: flex; flex-direction: column; align-items: center; }
+        .nav-arrow { padding: 0.5rem; cursor: pointer; opacity: 0.6; transition: 0.2s; }
         .nav-arrow:hover { opacity: 1; }
+        .hijri-label { font-size: 0.6rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.6; color: #cbd5e1; }
 
-        .btn-today-icon {
-            width: 36px;
-            height: 36px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(255,255,255,0.15);
-            border-radius: 10px;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-        .btn-today-icon:hover { background: rgba(255,255,255,0.25); }
-
-        .btn-setting {
-            width: 36px;
-            height: 36px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0.7;
-            cursor: pointer;
-            font-size: 1.1rem;
-            transition: opacity 0.2s;
-        }
-        .btn-setting:hover { opacity: 1; }
-
-        .hijri-label {
-            font-size: 0.6rem;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            opacity: 0.6;
-            margin-top: 0.1rem;
-            color: #cbd5e1;
-        }
-
-        .btn-floating-search {
-            position: absolute;
-            bottom: 5rem;
-            right: 1.5rem;
-            width: 56px;
-            height: 56px;
-            border-radius: 50%;
-            background: rgba(15, 23, 42, 0.4);
-            backdrop-filter: blur(2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .desktop-sidebar {
+            width: 280px;
+            background: var(--premium-gradient);
             color: white;
-            font-size: 1.25rem;
-            cursor: move;
+            display: none;
+            flex-direction: column;
+            padding: 2rem;
+            justify-content: space-between;
+            box-shadow: 4px 0 24px rgba(0,0,0,0.1);
             z-index: 30;
-            transition: background 0.2s, transform 0.1s;
-            border: 1px solid rgba(255,255,255,0.2);
-            touch-action: none;
         }
-        
-        .btn-floating-search:active { 
-            background: rgba(15, 23, 42, 0.6); 
-            transform: scale(0.95);
+
+        .desktop-right-panel {
+            width: 320px;
+            background: #f1f5f9;
+            display: none;
+            flex-direction: column;
+            padding: 1.5rem;
+            border-left: 1px solid #e2e8f0;
+            overflow-y: auto;
         }
 
         .main-content {
@@ -162,26 +129,46 @@
             padding: 1rem;
             padding-bottom: 5rem;
             scrollbar-width: none;
+            display: flex;
+            flex-direction: column;
+        }
+        @media (min-width: 1024px) {
+            .main-content { padding: 2rem; padding-bottom: 2rem; background: white; }
         }
         .main-content::-webkit-scrollbar { display: none; }
 
+        /* --- CALENDAR GRID --- */
         .calendar-card {
             background: #f8fafc;
             border-radius: 24px;
-            box-shadow: 8px 8px 16px #cbd5e1, -8px -8px 16px #ffffff;
             padding: 1rem;
-            margin-bottom: 1.5rem;
             position: relative;
-            overflow: hidden;
             touch-action: pan-y pinch-zoom;
-            perspective: 1200px;
+            box-shadow: 8px 8px 16px #cbd5e1, -8px -8px 16px #ffffff;
+            perspective: 1200px; /* Enable 3D transitions */
+        }
+
+        @media (min-width: 1024px) {
+            .calendar-card {
+                box-shadow: none;
+                background: transparent;
+                padding: 0;
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+            }
+            .calendar-grid-container { height: 100%; }
+            .calendar-grid { 
+                height: 100%; 
+                grid-template-rows: 40px repeat(6, 1fr);
+            }
         }
 
         .calendar-grid-container {
             width: 100%;
             transform-style: preserve-3d;
             backface-visibility: hidden;
-            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s;
+            /* Transition handled via JS now */
         }
 
         .calendar-grid {
@@ -190,344 +177,240 @@
             gap: 4px;
         }
 
+        @media (min-width: 1024px) { .calendar-grid { gap: 10px; } }
+
         .day-label {
-            text-align: center;
-            font-size: 0.7rem;
-            font-weight: 800;
-            color: #64748b;
-            padding-bottom: 0.75rem;
-            text-transform: uppercase;
+            text-align: center; font-size: 0.7rem; font-weight: 800;
+            color: #64748b; padding-bottom: 0.75rem; text-transform: uppercase;
+        }
+        @media (min-width: 1024px) {
+            .day-label { padding-bottom: 0; display: flex; align-items: center; justify-content: center; }
         }
 
         .day-cell {
             aspect-ratio: 1/1.1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            border-radius: 14px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            position: relative;
-            cursor: pointer;
-            transition: all 0.2s;
-            color: #1e293b;
-            border: 1px solid transparent;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            border-radius: 14px; font-size: 1.1rem; font-weight: 600;
+            position: relative; cursor: pointer; transition: all 0.2s;
+            color: #1e293b; border: 1px solid transparent;
+        }
+
+        @media (min-width: 1024px) {
+            .day-cell {
+                aspect-ratio: auto;
+                min-height: 80px;
+                border-radius: 12px;
+                background: #f8fafc;
+                align-items: center; /* Centered as requested */
+                justify-content: center;
+                padding: 4px;
+            }
+            .day-cell .date-wrapper {
+                font-size: 1.6rem;
+                font-weight: 700;
+                margin-bottom: 2px;
+            }
+            .day-cell:hover { background: #e2e8f0; transform: translateY(-2px); }
+            .hijri-text { top: 6px; right: 8px; }
+            .pasaran-text { margin-top: 0; align-self: center; font-size: 0.65rem !important; opacity: 0.7; }
         }
         
-        .day-cell:active { transform: scale(0.95); }
-
-        .day-cell.today {
-            background: var(--premium-gradient);
-            color: white !important;
-            box-shadow: 0 8px 16px rgba(30, 27, 75, 0.25);
-            transform: scale(1.02);
-            z-index: 2;
-            border: none;
-        }
-
-        .day-cell.birthday {
-            background: var(--gold-gradient);
-            color: white !important;
-            box-shadow: 0 4px 12px rgba(217, 119, 6, 0.4);
-            border: 2px solid white;
-            z-index: 3;
-        }
-
-        .day-cell.anniversary {
-            background: var(--romance-gradient);
-            color: white !important;
-            box-shadow: 0 4px 12px rgba(190, 24, 93, 0.4);
-            border: 2px solid white;
-            z-index: 3;
-        }
-
-        .date-wrapper {
-            position: relative;
-            display: inline-block;
-            line-height: 1;
-        }
-
-        .cuti-dot {
-            position: absolute;
-            bottom: 2px;
-            right: -6px;
-            width: 5px;
-            height: 5px;
-            background-color: #ef4444;
-            border-radius: 50%;
-            z-index: 10;
-        }
-
-        .obs-dot {
-            position: absolute;
-            bottom: 2px;
-            left: -6px;
-            width: 5px;
-            height: 5px;
-            background-color: #3b82f6;
-            border-radius: 50%;
-            z-index: 10;
-        }
-        
-        .day-cell .pasaran-text {
-            font-size: 0.5rem;
-            font-weight: 500;
-            opacity: 0.6;
-            margin-top: 4px;
-        }
-
-        .day-cell.highlight-animate {
-            animation: highlightPulse 1s ease-out;
-            background: #3b82f6 !important;
-            color: white !important;
-        }
-        @keyframes highlightPulse {
-            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7); }
-            50% { transform: scale(1.1); box-shadow: 0 0 0 10px rgba(59, 130, 246, 0); }
-            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
-        }
-
+        .day-cell.today { background: var(--premium-gradient); color: white !important; box-shadow: 0 8px 16px rgba(30, 27, 75, 0.25); transform: scale(1.02); z-index: 2; border: none; }
+        .day-cell.birthday { background: var(--gold-gradient); color: white !important; box-shadow: 0 4px 12px rgba(217, 119, 6, 0.4); border: 2px solid white; z-index: 3; }
+        .day-cell.anniversary { background: var(--romance-gradient); color: white !important; box-shadow: 0 4px 12px rgba(190, 24, 93, 0.4); border: 2px solid white; z-index: 3; }
         .day-cell.sunday, .day-cell.holiday { color: #ef4444; }
         .day-cell.friday { color: #059669; }
 
+        .date-wrapper { position: relative; line-height: 1; }
+        .cuti-dot, .obs-dot { position: absolute; width: 5px; height: 5px; border-radius: 50%; z-index: 10; }
+        .cuti-dot { bottom: 2px; right: -6px; background-color: #ef4444; }
+        .obs-dot { bottom: 2px; left: -6px; background-color: #3b82f6; }
+        
+        @media (min-width: 1024px) {
+            .cuti-dot { bottom: 4px; right: -6px; width: 6px; height: 6px; }
+            .obs-dot { bottom: 4px; left: -6px; width: 6px; height: 6px; }
+        }
+        
+        .pasaran-text { font-size: 0.5rem; font-weight: 500; opacity: 0.6; margin-top: 4px; }
+        .hijri-text { font-size: 0.5rem; position: absolute; top: 4px; right: 5px; opacity: 0.5; }
         .hidden-element { display: none !important; }
 
-        .hijri-text {
-            font-size: 0.5rem;
-            position: absolute;
-            top: 4px;
-            right: 5px; 
-            left: auto;
-            opacity: 0.5;
-            font-weight: 400;
-        }
-
+        /* LIST & UTILS */
         .holiday-item, .observance-item, .birthday-item, .anniversary-item {
-            padding: 0.85rem 1rem;
-            background: #ffffff;
-            border-radius: 16px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-            margin-bottom: 0.5rem;
+            padding: 0.85rem 1rem; background: #ffffff; border-radius: 16px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05); margin-bottom: 0.5rem; transition: transform 0.2s;
         }
-
         .holiday-item { border-left: 4px solid #ef4444; }
         .observance-item { border-left: 4px solid #3b82f6; }
-        .birthday-item { border-left: 4px solid #d97706; background: #fffbeb; }
-        .anniversary-item { border-left: 4px solid #be185d; background: #fdf2f8; }
-
-        .quote-minimalist {
-            margin-top: 2.5rem;
-            text-align: center;
-            padding: 0 1.5rem;
+        .birthday-item { background: #fffbeb; border-left: 4px solid #d97706; }
+        .anniversary-item { background: #fdf2f8; border-left: 4px solid #be185d; }
+        
+        .event-list-container:empty::before {
+            content: 'Tidak ada agenda bulan ini';
+            display: block; text-align: center; color: #94a3b8; font-size: 0.8rem; margin-top: 2rem;
         }
 
-        .quote-text {
-            font-size: 0.9rem;
-            color: #64748b;
-            font-style: italic;
-            line-height: 1.6;
-            font-weight: 400;
+        .btn-floating-search {
+            position: absolute; bottom: 5rem; right: 1.5rem;
+            width: 56px; height: 56px; border-radius: 50%;
+            background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(2px);
+            display: flex; align-items: center; justify-content: center;
+            color: white; font-size: 1.25rem; z-index: 30;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3); cursor: pointer;
         }
 
         .footer-rhadzor {
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            background: rgba(255,255,255,0.9);
-            backdrop-filter: blur(5px);
-            padding: 1rem;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-top: 1px solid #e2e8f0;
-            gap: 0.75rem;
-            z-index: 10;
-        }
-
-        .rhadzor-logo {
-            width: 28px;
-            height: 28px;
-            background: var(--premium-gradient);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 900;
-            font-size: 0.9rem;
+            position: absolute; bottom: 0; width: 100%;
+            background: rgba(255,255,255,0.9); backdrop-filter: blur(5px);
+            padding: 1rem; display: flex; justify-content: center; align-items: center;
+            border-top: 1px solid #e2e8f0; gap: 0.75rem; z-index: 10;
         }
 
         .modal-overlay {
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(15, 23, 42, 0.6);
-            backdrop-filter: blur(4px);
-            display: none;
-            justify-content: center;
-            align-items: flex-end;
-            z-index: 100;
-            opacity: 0;
-            transition: opacity 0.3s;
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px);
+            display: none; z-index: 100; opacity: 0; transition: opacity 0.3s;
+        }
+        .modal-overlay.active { display: flex; opacity: 1; }
+
+        @media (max-width: 1023px) {
+            .modal-overlay { align-items: flex-end; }
+            .modal-content {
+                background: white; width: 100%; max-width: 448px; margin: 0 auto;
+                border-top-left-radius: 28px; border-top-right-radius: 28px;
+                padding: 1.5rem; transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+                max-height: 80vh; overflow-y: auto;
+            }
+            .modal-overlay.active .modal-content { transform: translateY(0); }
         }
 
-        .modal-overlay.active { 
-            display: flex; 
-            opacity: 1;
+        @media (min-width: 1024px) {
+            .modal-overlay { align-items: center; justify-content: center; }
+            .modal-content {
+                background: white; width: 400px; border-radius: 24px; padding: 2rem;
+                box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+                transform: scale(0.9); transition: transform 0.2s;
+            }
+            .modal-overlay.active .modal-content { transform: scale(1); }
+            .modal-header-line { display: none; }
         }
 
-        .modal-content {
-            background: white;
-            width: 100%;
-            max-width: 448px;
-            border-top-left-radius: 28px;
-            border-top-right-radius: 28px;
-            padding: 1.5rem;
-            transform: translateY(100%);
-            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            max-height: 80vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .modal-overlay.active .modal-content { transform: translateY(0); }
-
-        .scroller-wrapper {
-            position: relative;
-            height: 220px;
-            overflow: hidden;
-            mask-image: linear-gradient(to bottom, transparent, black 20%, black 80%, transparent);
-            -webkit-mask-image: linear-gradient(to bottom, transparent, black 20%, black 80%, transparent);
-            margin: 1rem 0;
-            display: flex;
-        }
-
-        .scroller-col {
-            flex: 1;
-            height: 100%;
-            overflow-y: auto;
-            scroll-behavior: smooth;
-            padding: 85px 0;
-            scrollbar-width: none;
-            text-align: center;
-            scroll-snap-type: y mandatory;
-        }
-        .scroller-col::-webkit-scrollbar { display: none; }
-
-        .scroller-item {
-            padding: 10px;
-            font-size: 1.1rem;
-            font-weight: 500;
-            color: #94a3b8;
-            cursor: pointer;
-            transition: all 0.3s;
-            opacity: 0.5;
-            scroll-snap-align: center;
-        }
-
-        .scroller-item.active {
-            font-size: 1.5rem;
-            font-weight: 800;
-            color: #0f172a;
-            transform: scale(1.1);
-            opacity: 1;
-        }
-
-        .selection-indicator {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 90%;
-            height: 50px;
-            border-top: 1px solid #e2e8f0;
-            border-bottom: 1px solid #e2e8f0;
-            pointer-events: none;
-            z-index: -1;
-            background: #f8fafc;
-        }
-
-        .modal-header-line {
-            width: 48px;
-            height: 6px;
-            background: #e2e8f0;
-            border-radius: 99px;
-            margin: 0 auto 1.5rem auto;
-        }
+        .modal-header-line { width: 48px; height: 6px; background: #e2e8f0; border-radius: 99px; margin: 0 auto 1.5rem auto; }
         
+        .desktop-header-controls {
+            display: none; justify-content: space-between; align-items: center;
+            margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid #e2e8f0;
+        }
+        @media (min-width: 1024px) { .desktop-header-controls { display: flex; } }
+
         .toggle-switch {
-            appearance: none;
-            width: 44px;
-            height: 24px;
-            background: #cbd5e1;
-            border-radius: 99px;
-            position: relative;
-            cursor: pointer;
-            transition: background 0.2s;
+            appearance: none; width: 40px; height: 22px; background: #cbd5e1;
+            border-radius: 99px; position: relative; cursor: pointer; transition: background 0.2s;
         }
         .toggle-switch::after {
-            content: '';
-            position: absolute;
-            top: 2px;
-            left: 2px;
-            width: 20px;
-            height: 20px;
-            background: white;
-            border-radius: 50%;
-            transition: transform 0.2s;
+            content: ''; position: absolute; top: 2px; left: 2px; width: 18px; height: 18px;
+            background: white; border-radius: 50%; transition: transform 0.2s;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
         .toggle-switch:checked { background: #3b82f6; }
-        .toggle-switch:checked::after { transform: translateX(20px); }
+        .toggle-switch:checked::after { transform: translateX(18px); }
 
-        /* Custom Selector Style */
+        /* Premium Select for Transitions */
         .premium-select {
-            width: 100%;
-            padding: 0.75rem 1rem;
-            background: #f1f5f9;
-            border: 1px solid #e2e8f0;
-            border-radius: 12px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: #1e293b;
-            outline: none;
-            cursor: pointer;
-            appearance: none;
+            width: 100%; padding: 0.75rem 1rem; background: #f1f5f9;
+            border: 1px solid #e2e8f0; border-radius: 12px;
+            font-size: 0.85rem; font-weight: 600; color: #1e293b;
+            outline: none; cursor: pointer; appearance: none;
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 1rem center;
-            background-size: 1rem;
+            background-repeat: no-repeat; background-position: right 1rem center; background-size: 1rem;
         }
+
+        .scroller-wrapper {
+            position: relative; height: 200px; overflow: hidden; display: flex;
+            mask-image: linear-gradient(to bottom, transparent, black 20%, black 80%, transparent);
+            -webkit-mask-image: linear-gradient(to bottom, transparent, black 20%, black 80%, transparent);
+        }
+        .scroller-col { flex: 1; overflow-y: auto; padding: 75px 0; scrollbar-width: none; text-align: center; scroll-snap-type: y mandatory; }
+        .scroller-item { padding: 10px; font-size: 1.1rem; color: #94a3b8; cursor: pointer; opacity: 0.5; scroll-snap-align: center; }
+        .scroller-item.active { font-size: 1.5rem; font-weight: 800; color: #0f172a; opacity: 1; transform: scale(1.1); }
+        .selection-indicator { position: absolute; top: 50%; left: 0; right: 0; height: 50px; transform: translateY(-50%); border-top: 1px solid #e2e8f0; border-bottom: 1px solid #e2e8f0; pointer-events: none; z-index: -1; }
     </style>
 </head>
 <body>
 
 <div class="app-container">
+    
+    <!-- === LEFT SIDEBAR (DESKTOP) === -->
+    <div class="desktop-sidebar">
+        <div>
+            <div class="flex items-center gap-3 mb-8">
+                <div class="w-10 h-10 bg-white rounded-lg flex items-center justify-center text-slate-900 font-black text-xl shadow-lg">R</div>
+                <div>
+                    <h1 class="font-bold text-lg leading-none tracking-widest">RHADZOR</h1>
+                </div>
+            </div>
+
+            <!-- Settings in Sidebar -->
+            <div class="space-y-4 mb-8">
+                <p class="text-xs font-bold opacity-50 uppercase tracking-widest mb-2">Tampilan</p>
+                <div class="flex justify-between items-center">
+                    <span class="text-sm font-medium opacity-90">Pasaran Jawa</span>
+                    <input type="checkbox" class="toggle-switch" id="dsk-pasaran" onchange="toggleSetting('showPasaran')">
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-sm font-medium opacity-90">Hijriah</span>
+                    <input type="checkbox" class="toggle-switch" id="dsk-hijri" onchange="toggleSetting('showHijri')">
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-sm font-medium opacity-90">Hari Peringatan</span>
+                    <input type="checkbox" class="toggle-switch" id="dsk-obs" onchange="toggleSetting('showObservances')">
+                </div>
+            </div>
+
+            <div class="space-y-2 mb-8">
+                <p class="text-xs font-bold opacity-50 uppercase tracking-widest mb-1">Efek Transisi</p>
+                <select class="premium-select" onchange="settings.transitionType = this.value">
+                    <option value="slide">Slide (Klasik)</option>
+                    <option value="cube">Cube Flip (3D)</option>
+                    <option value="fade">Fade (Lembut)</option>
+                    <option value="zoom">Zoom In/Out</option>
+                    <option value="flip">Flip Card</option>
+                </select>
+            </div>
+
+            <!-- Quick Jump -->
+             <button onclick="goToToday()" class="w-full bg-white/10 hover:bg-white/20 transition p-3 rounded-xl flex items-center justify-center gap-2 mb-2 font-bold text-sm">
+                <i class="fas fa-calendar-day"></i> Hari Ini
+            </button>
+            <button onclick="openDateSearch()" class="w-full bg-white/10 hover:bg-white/20 transition p-3 rounded-xl flex items-center justify-center gap-2 font-bold text-sm">
+                <i class="fas fa-search"></i> Cari Tanggal
+            </button>
+        </div>
+
+        <!-- Footer Sidebar -->
+        <div class="text-center opacity-40 text-xs">
+            &copy; 2026 Rhadzor Family<br>V10 Final
+        </div>
+    </div>
+
+    <!-- === HEADER (MOBILE ONLY) === -->
     <header class="header-rhadzor">
         <div class="header-left">
             <div class="btn-setting" onclick="openSettings()">
                 <i class="fas fa-cog"></i>
             </div>
         </div>
-
         <div class="header-center">
-            <div class="nav-row-compact">
-                <div class="nav-arrow" onclick="changeMonth(-1)">
-                    <i class="fas fa-chevron-left"></i>
-                </div>
-                
+            <div class="flex items-center gap-2">
+                <div class="nav-arrow" onclick="changeMonth(-1)"><i class="fas fa-chevron-left"></i></div>
                 <div class="month-year-title">
-                    <span class="unit-wrapper" id="monthLabel" onclick="openMonthSelector()">JANUARI</span>
-                    <span class="unit-wrapper" id="yearLabel" onclick="openYearSelector()">2026</span>
+                    <span id="monthLabelMobile" onclick="openMonthSelector()">JANUARI</span>
+                    <span id="yearLabelMobile" onclick="openYearSelector()">2026</span>
                 </div>
-
-                <div class="nav-arrow" onclick="changeMonth(1)">
-                    <i class="fas fa-chevron-right"></i>
-                </div>
+                <div class="nav-arrow" onclick="changeMonth(1)"><i class="fas fa-chevron-right"></i></div>
             </div>
-            <div class="hijri-label" id="hijriRange">RAJAB - SYA'BAN</div>
+            <div class="hijri-label" id="hijriRangeMobile">RAJAB - SYA'BAN</div>
         </div>
-        
         <div class="header-right">
             <div class="btn-today-icon" onclick="goToToday()">
                 <i class="fas fa-calendar-day text-sm"></i>
@@ -535,32 +418,66 @@
         </div>
     </header>
 
+    <!-- === MAIN CONTENT === -->
     <main class="main-content">
+        
+        <!-- DESKTOP HEADER (Top of Main) -->
+        <div class="desktop-header-controls">
+            <div>
+                <h2 class="text-3xl font-black text-slate-800 tracking-tight" id="desktopMonthYear">JANUARI 2026</h2>
+                <p class="text-sm text-slate-500 font-medium tracking-widest uppercase mt-1" id="desktopHijri">1447 HIJRIAH</p>
+            </div>
+            <div class="flex gap-2">
+                <button onclick="changeMonth(-1)" class="w-10 h-10 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-700 transition"><i class="fas fa-chevron-left"></i></button>
+                <button onclick="changeMonth(1)" class="w-10 h-10 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-700 transition"><i class="fas fa-chevron-right"></i></button>
+            </div>
+        </div>
+
         <div class="calendar-card" id="swipeArea">
             <div class="calendar-grid-container" id="gridContainer">
                 <div class="calendar-grid" id="calendarGrid"></div>
             </div>
         </div>
-        <div class="space-y-2" id="holidayContainer"></div>
-        <div class="quote-minimalist">
-            <p class="quote-text" id="quoteDisplay"></p>
+
+        <!-- LIST: On Mobile displayed here, on Desktop hidden (moved to right panel) -->
+        <div class="lg:hidden space-y-2 mt-6" id="holidayContainerMobile"></div>
+
+        <div class="lg:hidden quote-minimalist mt-8 text-center px-6">
+            <p class="text-xs text-slate-500 italic" id="quoteDisplayMobile">"Kata bijak di sini"</p>
         </div>
     </main>
 
-    <div id="searchBtn" class="btn-floating-search">
+    <!-- === RIGHT PANEL (DESKTOP) === -->
+    <div class="desktop-right-panel">
+        <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest mb-4">Agenda Bulan Ini</h3>
+        
+        <div id="holidayContainerDesktop" class="space-y-3 event-list-container flex-1">
+            <!-- Content duplicated via JS -->
+        </div>
+
+        <div class="mt-auto pt-6 border-t border-slate-200">
+            <i class="fas fa-quote-left text-slate-300 text-lg mb-2 block"></i>
+            <p class="text-sm italic text-slate-600 font-medium leading-relaxed" id="quoteDisplayDesktop">Loading quote...</p>
+        </div>
+    </div>
+
+    <!-- Floating Search (Mobile Only) -->
+    <div id="searchBtn" class="btn-floating-search lg:hidden">
         <i class="fas fa-search"></i>
     </div>
 
-    <footer class="footer-rhadzor">
-        <div class="rhadzor-logo">R</div>
+    <footer class="footer-rhadzor lg:hidden">
+        <div class="w-7 h-7 bg-slate-900 rounded-md flex items-center justify-center text-white font-bold text-xs">R</div>
         <span class="text-xs font-black tracking-[0.2em] text-slate-800 uppercase">RHADZOR</span>
     </footer>
 </div>
 
+<!-- Modal Universal -->
 <div class="modal-overlay" id="selectorModal" onclick="closeModal()">
     <div class="modal-content" onclick="event.stopPropagation()">
         <div class="modal-header-line"></div>
-        <h3 id="modalTitle" class="text-center font-bold text-slate-800 mb-2 uppercase text-xs tracking-widest hidden">JUDUL MODAL</h3>
+        <h3 id="modalTitle" class="text-center font-bold text-slate-800 mb-4 uppercase text-xs tracking-widest hidden">JUDUL MODAL</h3>
+        
         <div id="modalBodyWrapper" class="flex-1 overflow-hidden flex flex-col">
             <div id="modalBody" class="w-full"></div>
         </div>
@@ -568,40 +485,17 @@
 </div>
 
 <script>
-    // Register Service Worker
-    if ('serviceWorker' in navigator) {
-        const swContent = `
-            const CACHE_NAME = 'rhadzor-cal-v10';
-            const ASSETS = [
-                '${window.location.href}',
-                'https://cdn.tailwindcss.com',
-                'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap',
-                'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css'
-            ];
-            self.addEventListener('install', e => {
-                e.waitUntil(caches.open(CACHE_NAME).then(c => c.addAll(ASSETS)));
-                self.skipWaiting();
-            });
-            self.addEventListener('activate', e => e.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k))))));
-            self.addEventListener('fetch', e => {
-                e.respondWith(caches.match(e.request).then(res => res || fetch(e.request).catch(() => caches.match('${window.location.href}'))));
-            });
-        `;
-        const blob = new Blob([swContent], { type: 'text/javascript' });
-        const swUrl = URL.createObjectURL(blob);
-        navigator.serviceWorker.register(swUrl).catch(err => console.log("SW Reg Error:", err));
-    }
-
+    // --- DATABASE ---
     const quotes = [
-        "Semakin kita mencari kebahagiaan, semakin jauh ia menghilang.", "Kegagalan terbesar adalah tidak pernah mencoba.", "Kata-kata terlembut bisa melukai paling dalam.", "Kita belajar paling banyak dari orang yang paling kita benci.", "Diam terkadang lebih berisik daripada teriakan.", "Kehilangan mengajarkan kita nilai memiliki.", "Kesendirian ramai, keramaian bisa sangat sunyi.", "Menerima adalah cara terkuat untuk melawan.", "Kita paling kuat saat mengakui kelemahan.", "Berubah adalah satu-satunya yang tetap.", "Makin banyak tahu, makin sadar tak tahu apa-apa.", "Waktu sembuhkan luka, waktu juga ciptakan luka.", "Cinta membebaskan dengan cara mengikat.", "Kesederhanaan butuh usaha yang rumit.", "Memberi adalah cara terbaik menerima.", "Memaafkan membebaskan yang memaafkan.", "Ketakutan terbesar adalah takut itu sendiri.", "Kontrol dimulai dari melepas kontrol.", "Kematian memberi arti pada kehidupan.", "Harapan bisa menjadi belenggu tersendiri.", "Kebenaran menyakitkan lebih baik dari kebohongan manis.", "Kesalahan masa lalu adalah guru terbaik hari ini.", "Semakin keras kita pegang, semakin mudah lepas.", "Pertanyaan lebih berharga daripada jawaban.", "Kegelapan mengajarkan kita menghargai cahaya.", "Kepastian adalah ilusi yang nyaman.", "Kita paling hidup saat hampir mati.", "Mendengar lebih sulit daripada berbicara.", "Kesuksesan dimulai dari kegagalan berulang.", "Kehilangan jalan adalah cara menemukan jalan baru.", "Keraguan adalah awal dari kebijaksanaan.", "Melambat terkadang cara tercepat sampai tujuan.", "Rasa sakit mengingatkan kita bahwa kita hidup.", "Mengenal diri sendiri adalah perjalanan seumur hidup.", "Kebahagiaan sejati datang dari dalam, bukan luar.", "Waktu tidak bisa dibeli tapi sering kita sia-siakan.", "Masalah terbesar sering punya solusi tercepat.", "Kehilangan adalah bagian dari memiliki.", "Kesempurnaan adalah musuh dari kemajuan.", "Kita tumbuh paling cepat di luar zona nyaman.", "Yang kita takuti sering tidak pernah terjadi.", "Kebencian meracuni yang membenci.", "Berhenti adalah langkah maju terkadang.", "Mimpi tanpa aksi hanya angan-angan.", "Ketenangan lahir dari menerima kekacauan.", "Perpisahan mengajarkan arti kebersamaan.", "Kekuatan sejati adalah kelembutan.", "Hidup dimulai di ujung zona nyaman.", "Kesabaran adalah kekuatan yang tersembunyi.", "Melepas adalah bentuk kepemilikan tertinggi."
+        "Semakin kita mencari kebahagiaan, semakin jauh ia menghilang.", "Kegagalan terbesar adalah tidak pernah mencoba.", "Kata-kata terlembut bisa melukai paling dalam.", "Kita belajar paling banyak dari orang yang paling kita benci.", "Diam terkadang lebih berisik daripada teriakan.", "Kehilangan mengajarkan kita nilai memiliki.", "Kesendirian ramai, keramaian bisa sangat sunyi.", "Menerima adalah cara terkuat untuk melawan.", "Kita paling kuat saat mengakui kelemahan.", "Berubah adalah satu-satunya yang tetap.", "Makin banyak tahu, makin sadar tak tahu apa-apa.", "Waktu sembuhkan luka, waktu juga ciptakan luka.", "Cinta membebaskan dengan cara mengikat.", "Kesederhanaan butuh usaha yang rumit.", "Memberi adalah cara terbaik menerima.", "Memaafkan membebaskan yang memaafkan.", "Ketakutan terbesar adalah takut itu sendiri.", "Kontrol dimulai dari melepas kontrol.", "Kematian memberi arti pada kehidupan.", "Harapan bisa menjadi belenggu tersendiri.", "Kebenaran menyakitkan lebih baik dari kebohongan manis.", "Kesalahan masa lalu adalah guru terbaik hari ini.", "Semakin keras kita pegang, semakin mudah lepas.", "Pertanyaan lebih berharga daripada jawaban.", "Kegelapan mengajarkan kita menghargai cahaya.", "Kepastian adalah ilusi yang nyaman.", "Kita paling hidup saat hampir mati.", "Mendengar lebih sulit daripada berbicara.", "Kesuksesan dimulai dari kegagalan berulang.", "Kehilangan jalan adalah cara menemukan jalan baru.", "Keraguan adalah awal dari kebijaksanaan.", "Melambat terkadang cara tercepat sampai tujuan.", "Rasa sakit mengingatkan kita bahwa kita hidup.", "Mengenal diri sendiri adalah perjalanan seumur hidup.", "Kebahagiaan sejati datang dari dalam, bukan luar.", "Waktu tidak bisa dibeli tapi sering kita sia-siakan.", "Masalah terbesar sering punya solusi tersederhana.", "Kehilangan adalah bagian dari memiliki.", "Kesempurnaan adalah musuh dari kemajuan.", "Kita tumbuh paling cepat di luar zona nyaman.", "Yang kita takuti sering tidak pernah terjadi.", "Kebencian meracuni yang membenci.", "Berhenti adalah langkah maju terkadang.", "Mimpi tanpa aksi hanya angan-angan.", "Ketenangan lahir dari menerima kekacauan.", "Perpisahan mengajarkan arti kebersamaan.", "Kekuatan sejati adalah kelembutan.", "Hidup dimulai di ujung zona nyaman.", "Kesabaran adalah kekuatan yang tersembunyi.", "Melepas adalah bentuk kepemilikan tertinggi."
     ];
 
     const familyBirthdays = [
-        { name: "Rhadzor", day: 28, month: 5, year: 1986 },
-        { name: "Lisa Istri Tercinta ❤️❤️", day: 22, month: 6, year: 1988 },
-        { name: "Alby", day: 3, month: 8, year: 2013 },
-        { name: "Meka", day: 2, month: 3, year: 2020 },
-        { name: "Sansa", day: 21, month: 3, year: 2022 }
+        { name: "Rhadzor", day: 28, month: 5, year: 1986 }, 
+        { name: "Lisa Istri Tercinta ❤️❤️", day: 22, month: 6, year: 1988 }, 
+        { name: "Alby", day: 3, month: 8, year: 2013 }, 
+        { name: "Meka", day: 2, month: 3, year: 2020 }, 
+        { name: "Sansa", day: 21, month: 3, year: 2022 } 
     ];
 
     const weddingAnniversary = { day: 23, month: 11, year: 2012 };
@@ -648,7 +542,7 @@
     };
 
     const nationalObservances = {
-        0: { 3: "Hari Amal Bhakti Kemenag RI", 5: "Hari KOWAL", 10: "Hari Tritura", 15: "Hari Dharma Samudera", 17: "Hari Raya Siwaratri", 23: "Hari Patriotik", 25: "Hari Gizi Nasional", 31: "Hari Lahir NU" },
+        0: { 3: "Hari Amal Bhakti Kemenag RI", 5: "Hari KOWAL", 10: "Hari Tritura", 15: "Hari Dharma Samudera", 17: "Hari Raya Siwaratri", 23: "Hari Patriotik", 25: "Hari Gizi Nasional", 31: "Harlah NU" },
         1: { 5: "Peristiwa Kapal Tujuh", 9: "Hari Pers Nasional (HPN)", 14: "Peringatan PETA", 21: "Hari Peduli Sampah Nasional", 28: "Hari Gizi Nasional" },
         2: { 1: "Serangan Umum 1 Maret", 9: "Hari Musik Nasional", 30: "Hari Film Nasional" },
         3: { 6: "Hari Nelayan Indonesia", 9: "Hari TNI AU", 16: "Hari Kopassus", 21: "Hari Kartini", 27: "Hari Pemasyarakatan", 28: "Hari Puisi Nasional" },
@@ -670,21 +564,36 @@
 
     let currentDate = new Date();
     let isAnimating = false;
-    let settings = { 
-        showHijri: true, 
-        showPasaran: true, 
-        showObservances: true, 
+    let isDragging = false;
+    
+    // STATE SETTINGS (Includes Transition Type from RhadzCal)
+    let settings = {
+        showHijri: true,
+        showPasaran: true,
+        showObservances: true,
         showFamily: true,
-        transitionType: 'slide' // Default transition
+        transitionType: 'slide' 
     };
 
     function init() {
+        syncSettingsUI();
         renderCalendar();
         updateQuote();
         setupSwipe();
         setupDrag();
+        
+        // Listener untuk resize window agar layout update jika perlu
+        window.addEventListener('resize', renderCalendar);
     }
 
+    function syncSettingsUI() {
+        // Sync desktop checkbox with state
+        document.getElementById('dsk-pasaran').checked = settings.showPasaran;
+        document.getElementById('dsk-hijri').checked = settings.showHijri;
+        document.getElementById('dsk-obs').checked = settings.showObservances;
+    }
+
+    // --- DRAG LOGIC (MOBILE ONLY) ---
     function setupDrag() {
         const btn = document.getElementById('searchBtn');
         let offsetX, offsetY, startTime;
@@ -717,8 +626,7 @@
             
             btn.style.left = x + 'px';
             btn.style.top = y + 'px';
-            btn.style.bottom = 'auto';
-            btn.style.right = 'auto';
+            btn.style.bottom = 'auto'; btn.style.right = 'auto';
         };
 
         const end = () => {
@@ -736,6 +644,11 @@
         btn.addEventListener('mousedown', start);
     }
 
+    function handleSearchClick() {
+        if (!isDragging) openDateSearch();
+    }
+
+    // --- ACCURATE HIJRI FUNCTION (FROM RHADZCAL) ---
     function getHijriDate(date) {
         let julian = Math.floor((date.getTime() / 86400000) + 2440587.5);
         let l = julian - 1948440 + 10632;
@@ -747,7 +660,7 @@
         let d = l - Math.floor((709 * m) / 24);
         let y = 30 * n + j - 30;
         
-        // Accurate sync for 21 March 2026
+        // Manual Correction for specific dates if needed (e.g. 21 March 2026)
         if (date.getFullYear() === 2026 && date.getMonth() === 2 && date.getDate() === 21) {
             return { day: 1, month: 9, year: y }; 
         }
@@ -755,6 +668,29 @@
         return { day: d, month: m - 1, year: y };
     }
 
+    // --- DATA HELPERS ---
+    function getHolidayName(d, m, y) {
+        if (holidaysData[y] && holidaysData[y][m] && holidaysData[y][m][d]) return holidaysData[y][m][d];
+        return null;
+    }
+    function getCutiBersamaName(d, m, y) {
+        if (cutiBersamaData[y] && cutiBersamaData[y][m] && cutiBersamaData[y][m][d]) return cutiBersamaData[y][m][d];
+        return null;
+    }
+    function getObservanceName(d, m) {
+        if (settings.showObservances && nationalObservances[m] && nationalObservances[m][d]) return nationalObservances[m][d];
+        return null;
+    }
+    function getBirthday(d, m) {
+        if (!settings.showFamily) return null;
+        return familyBirthdays.find(b => b.day === d && b.month === m);
+    }
+    function isAnniversary(d, m) {
+        if (!settings.showFamily) return null;
+        return weddingAnniversary.day === d && weddingAnniversary.month === m;
+    }
+
+    // --- CORE RENDER ---
     function renderCalendar() {
         const year = currentDate.getFullYear();
         const month = currentDate.getMonth();
@@ -762,12 +698,31 @@
         const isCurrentMonthYear = (now.getFullYear() === year && now.getMonth() === month);
         const todayDayNum = now.getDate();
         
-        document.getElementById('monthLabel').textContent = monthNames[month];
-        document.getElementById('yearLabel').textContent = year;
+        // Update Labels (Mobile)
+        document.getElementById('monthLabelMobile').textContent = monthNames[month];
+        document.getElementById('yearLabelMobile').textContent = year;
         
+        // Update Labels (Desktop)
+        document.getElementById('desktopMonthYear').textContent = `${monthNames[month]} ${year}`;
+        
+        // Hijri Logic (Calculated)
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+        const startH = getHijriDate(new Date(year, month, 1));
+        const endH = getHijriDate(new Date(year, month, daysInMonth));
+        const hijriStr = `${hijriMonths[startH.month]} - ${hijriMonths[endH.month]}`;
+        
+        document.getElementById('hijriRangeMobile').textContent = hijriStr;
+        document.getElementById('desktopHijri').textContent = hijriStr + " 1447H"; // Estimate Year
+        
+        // Visibilitas Hijri
+        const d = settings.showHijri ? 'block' : 'none';
+        document.getElementById('hijriRangeMobile').style.display = d;
+        document.getElementById('desktopHijri').style.display = d;
+
         const grid = document.getElementById('calendarGrid');
         grid.innerHTML = '';
         
+        // Render Header Hari
         dayShortNames.forEach(d => {
             const el = document.createElement('div');
             el.className = 'day-label';
@@ -776,105 +731,138 @@
         });
         
         const firstDay = new Date(year, month, 1).getDay();
-        const daysInMonth = new Date(year, month + 1, 0).getDate();
         
-        const startH = getHijriDate(new Date(year, month, 1));
-        const endH = getHijriDate(new Date(year, month, daysInMonth));
-        const hijriLabelEl = document.getElementById('hijriRange');
-        hijriLabelEl.textContent = `${hijriMonths[startH.month]} - ${hijriMonths[endH.month]}`;
-        hijriLabelEl.style.display = settings.showHijri ? 'block' : 'none';
-
-        for (let i = 0; i < firstDay; i++) grid.appendChild(document.createElement('div'));
+        for (let i = 0; i < firstDay; i++) {
+            grid.appendChild(document.createElement('div'));
+        }
         
         for (let d = 1; d <= daysInMonth; d++) {
             const dateObj = new Date(year, month, d);
             const isToday = isCurrentMonthYear && d === todayDayNum;
-            const h = getHijriDate(dateObj);
+            const h = getHijriDate(dateObj); // Use precise logic
             
+            const dayOfWeek = dateObj.getDay();
+            const isSunday = dayOfWeek === 0;
+            const isFriday = dayOfWeek === 5;
+            
+            const holidayName = getHolidayName(d, month, year);
+            const isHoliday = !!holidayName;
+            const cutiName = getCutiBersamaName(d, month, year);
+            const isCuti = !!cutiName;
+            const observanceName = getObservanceName(d, month);
+            const isObservance = !!observanceName;
+            const birthdayData = getBirthday(d, month);
+            const isBirthday = !!birthdayData;
+            const anniversaryData = isAnniversary(d, month);
+            
+            // Pasaran Calculation
             const refDate = new Date(2026, 0, 1);
             const diff = Math.floor((dateObj - refDate) / 86400000);
             const pasaranIdx = (3 + (diff % 5) + 5) % 5;
             
-            const holidayName = holidaysData[year]?.[month]?.[d];
-            const cutiName = cutiBersamaData[year]?.[month]?.[d];
-            const observanceName = settings.showObservances ? nationalObservances[month]?.[d] : null;
-            const bday = settings.showFamily ? familyBirthdays.find(b => b.day === d && b.month === month) : null;
-            const isAnniv = settings.showFamily && weddingAnniversary.day === d && weddingAnniversary.month === month;
-            
             const cell = document.createElement('div');
             let cellClass = `day-cell ${isToday ? 'today' : ''}`;
-            if (isAnniv) cellClass += ' anniversary';
-            else if (bday) cellClass += ' birthday';
-            else if (dateObj.getDay() === 0 || holidayName) cellClass += ' sunday';
-            else if (dateObj.getDay() === 5) cellClass += ' friday';
+            if (anniversaryData) cellClass += ' anniversary';
+            else if (isBirthday) cellClass += ' birthday';
+            else if (isSunday || isHoliday) cellClass += ' sunday';
+            else if (isFriday) cellClass += ' friday';
             
             cell.className = cellClass;
-            if (isToday) cell.id = 'currentDayCell';
+            cell.id = isToday ? 'currentDayCell' : '';
+
+            const hijriClass = settings.showHijri ? 'hijri-text' : 'hijri-text hidden-element';
+            const pasaranClass = settings.showPasaran ? 'pasaran-text' : 'pasaran-text hidden-element';
+            
+            const cutiDotHTML = isCuti ? `<div class="cuti-dot"></div>` : '';
+            const obsDotHTML = isObservance ? `<div class="obs-dot"></div>` : '';
 
             cell.innerHTML = `
-                <span class="hijri-text ${settings.showHijri ? '' : 'hidden-element'}">${h.day}</span>
-                <span class="date-wrapper">${d}${cutiName ? '<div class="cuti-dot"></div>' : ''}${observanceName ? '<div class="obs-dot"></div>' : ''}</span>
-                <span class="pasaran-text ${settings.showPasaran ? '' : 'hidden-element'}">${pasaranArr[pasaranIdx]}</span>
+                <span class="${hijriClass}">${h.day}</span>
+                <span class="date-wrapper">${d}${cutiDotHTML}${obsDotHTML}</span>
+                <span class="${pasaranClass}">${pasaranArr[pasaranIdx]}</span>
             `;
             
-            cell.onclick = () => showDetail(d, month, year, dayNames[dateObj.getDay()], pasaranArr[pasaranIdx], h.day, hijriMonths[h.month], holidayName, cutiName, observanceName, dateObj.getDay() === 0, bday, isAnniv);
+            cell.onclick = () => showDetail(d, month, year, dayNames[dayOfWeek], pasaranArr[pasaranIdx], h.day, hijriMonths[h.month], holidayName, cutiName, observanceName, isSunday, birthdayData, anniversaryData);
             grid.appendChild(cell);
         }
         renderEventsList(month, year);
     }
 
     function renderEventsList(month, year) {
-        const container = document.getElementById('holidayContainer');
-        container.innerHTML = '';
+        let htmlContent = '';
         
+        // 0. Anniversary
         if (settings.showFamily && weddingAnniversary.month === month) {
-            const age = year - weddingAnniversary.year;
-            const div = document.createElement('div');
-            div.className = 'anniversary-item flex justify-between items-center';
-            div.innerHTML = `<div class="flex flex-col"><span class="text-[0.7rem] font-bold text-pink-800">${weddingAnniversary.day} ${monthNames[month]}</span><span class="text-[0.6rem] text-pink-600 font-semibold">Anniversary Pernikahan ❤️</span></div><span class="text-[0.65rem] font-bold text-pink-700 bg-pink-100 px-2 py-1 rounded-full">Ke-${age}</span>`;
-            container.appendChild(div);
+            const annAge = year - weddingAnniversary.year;
+            if (annAge > 0) {
+                htmlContent += `
+                <div class="anniversary-item flex justify-between items-center cursor-pointer hover:scale-[1.02] transition">
+                    <div class="flex flex-col">
+                        <span class="text-[0.7rem] font-bold text-pink-800">${weddingAnniversary.day} ${monthNames[month]}</span>
+                        <span class="text-[0.6rem] text-pink-600 font-semibold">Anniversary Pernikahan ❤️</span>
+                    </div>
+                    <span class="text-[0.65rem] font-bold text-pink-700 bg-pink-100 px-2 py-1 rounded-full">Ke-${annAge}</span>
+                </div>`;
+            }
         }
 
+        // 1. Birthdays
         if (settings.showFamily) {
-            familyBirthdays.filter(b => b.month === month).sort((a,b) => a.day - b.day).forEach(b => {
-                const div = document.createElement('div');
-                div.className = 'birthday-item flex justify-between items-center';
-                div.innerHTML = `<div class="flex flex-col"><span class="text-[0.7rem] font-bold text-amber-800">${b.day} ${monthNames[month]}</span><span class="text-[0.6rem] text-amber-600 font-semibold">Ulang Tahun ${b.name}</span></div><span class="text-[0.65rem] font-bold text-amber-700 bg-amber-100 px-2 py-1 rounded-full">Ke-${year - b.year}</span>`;
-                container.appendChild(div);
+            const monthBirthdays = familyBirthdays.filter(b => b.month === month).sort((a,b) => a.day - b.day);
+            monthBirthdays.forEach(b => {
+                const age = year - b.year;
+                htmlContent += `
+                <div class="birthday-item flex justify-between items-center cursor-pointer hover:scale-[1.02] transition">
+                    <div class="flex flex-col">
+                        <span class="text-[0.7rem] font-bold text-amber-800">${b.day} ${monthNames[month]}</span>
+                        <span class="text-[0.6rem] text-amber-600 font-semibold truncate w-32">Ulang Tahun ${b.name}</span>
+                    </div>
+                    <span class="text-[0.65rem] font-bold text-amber-700 bg-amber-100 px-2 py-1 rounded-full">Ke-${age}</span>
+                </div>`;
             });
         }
 
-        let events = [];
-        if (holidaysData[year]?.[month]) Object.keys(holidaysData[year][month]).forEach(d => events.push({ d, n: holidaysData[year][month][d], t: 'h' }));
-        if (cutiBersamaData[year]?.[month]) Object.keys(cutiBersamaData[year][month]).forEach(d => events.push({ d, n: cutiBersamaData[year][month][d], t: 'c' }));
-        if (settings.showObservances && nationalObservances[month]) Object.keys(nationalObservances[month]).forEach(d => events.push({ d, n: nationalObservances[month][d], t: 'o' }));
+        // 2. Holidays, Cuti, Observances
+        let mergedEvents = [];
+        if (holidaysData[year] && holidaysData[year][month]) {
+            Object.keys(holidaysData[year][month]).forEach(d => mergedEvents.push({ day: parseInt(d), name: holidaysData[year][month][d], type: 'holiday' }));
+        }
+        if (cutiBersamaData[year] && cutiBersamaData[year][month]) {
+            Object.keys(cutiBersamaData[year][month]).forEach(d => mergedEvents.push({ day: parseInt(d), name: cutiBersamaData[year][month][d], type: 'cuti' }));
+        }
+        if (settings.showObservances && nationalObservances[month]) {
+            Object.keys(nationalObservances[month]).forEach(d => mergedEvents.push({ day: parseInt(d), name: nationalObservances[month][d], type: 'observance' }));
+        }
+        mergedEvents.sort((a, b) => a.day - b.day);
 
-        events.sort((a,b) => a.d - b.d).forEach(e => {
-            const div = document.createElement('div');
-            div.className = e.t === 'o' ? 'observance-item flex justify-between items-center' : 'holiday-item flex justify-between items-center';
-            div.innerHTML = `<span class="text-[0.7rem] font-bold text-slate-800">${e.d} ${monthNames[month]}</span><span class="text-[0.65rem] ${e.t === 'o' ? 'text-blue-600' : 'text-red-600'} font-medium text-right">${e.n}</span>`;
-            container.appendChild(div);
+        mergedEvents.forEach(evt => {
+            const isObs = evt.type === 'observance';
+            const colorClass = isObs ? 'text-blue-600' : 'text-red-600';
+            
+            htmlContent += `
+            <div class="${isObs ? 'observance-item' : 'holiday-item'} flex justify-between items-center cursor-pointer hover:scale-[1.02] transition">
+                <span class="text-[0.7rem] font-bold text-slate-800">${evt.day} ${monthNames[month]}</span>
+                <span class="text-[0.65rem] ${colorClass} font-medium text-right w-2/3 leading-tight">${evt.name}</span>
+            </div>`;
         });
+
+        document.getElementById('holidayContainerMobile').innerHTML = htmlContent;
+        document.getElementById('holidayContainerDesktop').innerHTML = htmlContent;
     }
 
     function goToToday() {
         currentDate = new Date();
         renderCalendar();
-        setTimeout(() => {
-            const todayCell = document.getElementById('currentDayCell');
-            if (todayCell) {
-                todayCell.classList.add('highlight-animate');
-                setTimeout(() => todayCell.classList.remove('highlight-animate'), 1000);
-            }
-        }, 50);
     }
 
     function updateQuote() {
         const idx = Math.floor(Math.random() * quotes.length);
-        document.getElementById('quoteDisplay').textContent = `"${quotes[idx]}"`;
+        const q = `"${quotes[idx]}"`;
+        document.getElementById('quoteDisplayMobile').textContent = q;
+        document.getElementById('quoteDisplayDesktop').textContent = q;
     }
 
-    /* MULTI-TRANSITION SYSTEM */
+    // --- ANIMATED MONTH CHANGE (FROM RHADZCAL) ---
     function changeMonth(dir) {
         if (isAnimating) return;
         isAnimating = true;
@@ -933,7 +921,7 @@
         applyTransitionOut();
         
         setTimeout(() => {
-            currentDate.setDate(1);
+            currentDate.setDate(1); 
             currentDate.setMonth(currentDate.getMonth() + dir);
             renderCalendar();
             updateQuote();
@@ -947,28 +935,26 @@
         }, 250);
     }
 
+    // --- MODAL SETTINGS & SELECTORS ---
     function openSettings() {
         const body = document.getElementById('modalBody');
         const title = document.getElementById('modalTitle');
-        title.classList.remove('hidden');
-        title.textContent = "PENGATURAN";
+        title.classList.remove('hidden'); title.textContent = "PENGATURAN";
         body.className = "p-4 space-y-4";
         
-        const toggles = [
-            { id: 'showPasaran', label: 'Tampilkan Tanggal Jawa' },
-            { id: 'showHijri', label: 'Tampilkan Tanggal Hijriah' },
-            { id: 'showObservances', label: 'Tampilkan Hari Peringatan' },
-            { id: 'showFamily', label: 'Tampilkan Hari Keluarga' }
-        ];
-
-        let html = toggles.map(o => `
+        const makeToggle = (label, key) => `
             <div class="flex justify-between items-center p-2 bg-slate-50 rounded-xl">
-                <span class="font-bold text-sm text-slate-700">${o.label}</span>
-                <input type="checkbox" class="toggle-switch" ${settings[o.id] ? 'checked' : ''} onchange="toggleSetting('${o.id}')">
-            </div>
-        `).join('');
-
-        // Transition Selector
+                <span class="font-bold text-sm text-slate-700">${label}</span>
+                <input type="checkbox" class="toggle-switch" ${settings[key] ? 'checked' : ''} onchange="toggleSetting('${key}')">
+            </div>`;
+            
+        let html = 
+            makeToggle('Tampilkan Pasaran', 'showPasaran') +
+            makeToggle('Tampilkan Hijriah', 'showHijri') +
+            makeToggle('Tampilkan Peringatan', 'showObservances') +
+            makeToggle('Tampilkan Keluarga', 'showFamily');
+            
+        // Add Transition Selector
         html += `
             <div class="pt-2">
                 <span class="block font-bold text-[0.65rem] text-slate-400 uppercase tracking-widest mb-2 px-1">Efek Transisi Bulan</span>
@@ -981,45 +967,79 @@
                 </select>
             </div>
         `;
-
+            
         body.innerHTML = html;
         openModal();
     }
 
     function toggleSetting(key) {
         settings[key] = !settings[key];
-        renderCalendar();
+        syncSettingsUI();
+        renderCalendar(); 
     }
 
+    // --- SCROLLER UTILS ---
+    function createScrollerItem(text, value, isActive) {
+        const item = document.createElement('div');
+        item.className = `scroller-item ${isActive ? 'active' : ''}`;
+        item.textContent = text;
+        item.dataset.value = value;
+        return item;
+    }
+    
+    function setupScrollSnapObserver(containerId) {
+        const container = document.getElementById(containerId);
+        let scrollTimeout;
+        container.onscroll = () => {
+            clearTimeout(scrollTimeout);
+            scrollTimeout = setTimeout(() => {
+                const center = container.scrollTop + (container.clientHeight / 2);
+                const items = container.querySelectorAll('.scroller-item');
+                let closest = null; let minDiff = Infinity;
+                items.forEach(item => {
+                    const itemCenter = item.offsetTop + (item.offsetHeight / 2);
+                    const diff = Math.abs(center - itemCenter);
+                    if (diff < minDiff) { minDiff = diff; closest = item; }
+                    item.classList.remove('active');
+                });
+                if (closest) closest.classList.add('active');
+            }, 50);
+        };
+    }
+
+    // --- SELECTORS ---
     function openMonthSelector() {
         const body = document.getElementById('modalBody');
         const title = document.getElementById('modalTitle');
-        title.classList.remove('hidden');
-        title.textContent = "PILIH BULAN";
+        title.classList.remove('hidden'); title.textContent = "PILIH BULAN";
         body.className = "grid grid-cols-3 gap-3 p-2";
-        body.innerHTML = monthNames.map((m, i) => `
-            <div onclick="currentDate.setMonth(${i}); renderCalendar(); closeModal();" class="p-3 text-center rounded-xl font-bold text-[0.75rem] cursor-pointer transition ${currentDate.getMonth() === i ? 'bg-slate-900 text-white shadow-lg' : 'bg-slate-50 text-slate-600 hover:bg-slate-100'}">${m}</div>
-        `).join('');
+        body.innerHTML = '';
+        monthNames.forEach((m, i) => {
+            const div = document.createElement('div');
+            div.className = `p-3 text-center rounded-xl font-bold text-[0.75rem] cursor-pointer transition ${currentDate.getMonth() === i ? 'bg-slate-900 text-white shadow-lg' : 'bg-slate-50 text-slate-600 hover:bg-slate-100'}`;
+            div.textContent = m;
+            div.onclick = () => { currentDate.setMonth(i); renderCalendar(); closeModal(); };
+            body.appendChild(div);
+        });
         openModal();
     }
 
     function openYearSelector() {
         const body = document.getElementById('modalBody');
         const title = document.getElementById('modalTitle');
-        title.classList.remove('hidden');
-        title.textContent = "PILIH TAHUN";
+        title.classList.remove('hidden'); title.textContent = "PILIH TAHUN";
         body.className = "w-full";
-        const curY = currentDate.getFullYear();
+        const currentYear = currentDate.getFullYear();
         body.innerHTML = `
-            <div class="scroller-wrapper"><div class="selection-indicator"></div><div class="scroller-col" id="yearListScroll"></div></div>
-            <button onclick="selectHighlightedYear()" class="w-full mt-4 bg-slate-900 text-white p-3 rounded-xl font-bold text-xs tracking-wider">PILIH TAHUN INI</button>
+            <div class="scroller-wrapper">
+                <div class="selection-indicator"></div>
+                <div class="scroller-col" id="yearListScroll"></div>
+            </div>
+            <button onclick="selectHighlightedYear()" class="w-full mt-4 bg-slate-900 text-white p-3 rounded-xl font-bold text-xs tracking-wider">PILIH TAHUN</button>
         `;
         const list = document.getElementById('yearListScroll');
-        for(let y = curY - 50; y <= curY + 50; y++) {
-            const item = document.createElement('div');
-            item.className = `scroller-item ${y === curY ? 'active' : ''}`;
-            item.textContent = y; item.dataset.value = y;
-            list.appendChild(item);
+        for(let y = currentYear - 100; y <= currentYear + 100; y++) {
+            list.appendChild(createScrollerItem(y, y, y === currentYear));
         }
         openModal();
         setupScrollSnapObserver('yearListScroll');
@@ -1031,97 +1051,94 @@
 
     function selectHighlightedYear() {
         const activeEl = document.querySelector('#yearListScroll .active');
-        if(activeEl) { currentDate.setFullYear(parseInt(activeEl.dataset.value)); renderCalendar(); closeModal(); }
+        if(activeEl) {
+            currentDate.setFullYear(parseInt(activeEl.dataset.value));
+            renderCalendar(); closeModal();
+        }
     }
 
     function openDateSearch() {
         const body = document.getElementById('modalBody');
         const title = document.getElementById('modalTitle');
-        title.classList.remove('hidden');
-        title.textContent = "CARI BULAN & TAHUN";
+        title.classList.remove('hidden'); title.textContent = "CARI TANGGAL";
         body.className = "w-full";
-        const curM = currentDate.getMonth();
-        const curY = currentDate.getFullYear();
+        const curM = currentDate.getMonth(); const curY = currentDate.getFullYear();
         body.innerHTML = `
-            <div class="scroller-wrapper"><div class="selection-indicator"></div><div class="scroller-col" id="monthScroller"></div><div class="scroller-col" id="yearScroller"></div></div>
-            <button onclick="jumpToSelected()" class="w-full mt-4 bg-slate-900 text-white p-3 rounded-xl font-bold text-xs tracking-wider">LIHAT KALENDER</button>
+            <div class="scroller-wrapper">
+                <div class="selection-indicator"></div>
+                <div class="scroller-col" id="monthScroller"></div>
+                <div class="scroller-col" id="yearScroller"></div>
+            </div>
+            <button onclick="jumpToSelectedMonthYear()" class="w-full mt-4 bg-slate-900 text-white p-3 rounded-xl font-bold text-xs tracking-wider">LIHAT KALENDER</button>
         `;
         const mList = document.getElementById('monthScroller');
         const yList = document.getElementById('yearScroller');
-        monthNames.forEach((m, i) => {
-            const item = document.createElement('div');
-            item.className = `scroller-item ${i === curM ? 'active' : ''}`;
-            item.textContent = m; item.dataset.value = i;
-            mList.appendChild(item);
-        });
-        for(let y = curY - 30; y <= curY + 30; y++) {
-            const item = document.createElement('div');
-            item.className = `scroller-item ${y === curY ? 'active' : ''}`;
-            item.textContent = y; item.dataset.value = y;
-            yList.appendChild(item);
-        }
+        monthNames.forEach((m, i) => { mList.appendChild(createScrollerItem(m, i, i === curM)); });
+        for(let y = curY - 50; y <= curY + 50; y++) { yList.appendChild(createScrollerItem(y, y, y === curY)); }
         openModal();
-        setupScrollSnapObserver('monthScroller');
-        setupScrollSnapObserver('yearScroller');
+        setupScrollSnapObserver('monthScroller'); setupScrollSnapObserver('yearScroller');
         setTimeout(() => {
-            const am = mList.querySelector('.active'); const ay = yList.querySelector('.active');
-            if(am) am.scrollIntoView({ block: 'center' });
-            if(ay) ay.scrollIntoView({ block: 'center' });
+            const activeM = mList.querySelector('.active'); const activeY = yList.querySelector('.active');
+            if(activeM) activeM.scrollIntoView({ block: 'center' });
+            if(activeY) activeY.scrollIntoView({ block: 'center' });
         }, 100);
     }
 
-    function jumpToSelected() {
-        const am = document.querySelector('#monthScroller .active');
-        const ay = document.querySelector('#yearScroller .active');
-        if(am && ay) { currentDate.setDate(1); currentDate.setMonth(parseInt(am.dataset.value)); currentDate.setFullYear(parseInt(ay.dataset.value)); renderCalendar(); updateQuote(); closeModal(); }
+    function jumpToSelectedMonthYear() {
+        const activeM = document.querySelector('#monthScroller .active');
+        const activeY = document.querySelector('#yearScroller .active');
+        if(activeM && activeY) {
+            currentDate.setDate(1);
+            currentDate.setMonth(parseInt(activeM.dataset.value));
+            currentDate.setFullYear(parseInt(activeY.dataset.value));
+            renderCalendar(); updateQuote(); closeModal();
+        }
     }
 
-    function setupScrollSnapObserver(id) {
-        const container = document.getElementById(id);
-        let timeout;
-        container.onscroll = () => {
-            clearTimeout(timeout);
-            timeout = setTimeout(() => {
-                const center = container.scrollTop + (container.clientHeight / 2);
-                const items = container.querySelectorAll('.scroller-item');
-                let closest = null; let minDiff = Infinity;
-                items.forEach(item => {
-                    const diff = Math.abs(center - (item.offsetTop + (item.offsetHeight/2)));
-                    if (diff < minDiff) { minDiff = diff; closest = item; }
-                    item.classList.remove('active');
-                });
-                if (closest) closest.classList.add('active');
-            }, 50);
-        };
-    }
-
-    function showDetail(d, m, y, dayName, pasaran, hDate, hMonth, holiday, cuti, obs, isSun, bday, anniv) {
+    // --- DETAIL MODAL ---
+    function showDetail(d, m, y, dayName, pasaranName, hDate, hMonth, holiday, cutiName, observanceName, isSunday, birthdayData, anniversaryData) {
         const body = document.getElementById('modalBody');
-        document.getElementById('modalTitle').classList.add('hidden');
+        const title = document.getElementById('modalTitle');
+        title.classList.add('hidden');
         body.className = "p-4 text-center";
         
-        let color = (isSun || holiday) ? "text-red-600" : "text-slate-900";
-        if (bday) color = "text-amber-600"; else if (anniv) color = "text-pink-600";
+        const detailQuote = quotes[Math.floor(Math.random() * quotes.length)];
+        const isRedDay = isSunday || !!holiday;
+        
+        let dateColor = isRedDay ? "text-red-600" : "text-slate-900";
+        let subColor = isRedDay ? "text-red-400" : "text-slate-400";
+        if(birthdayData) { dateColor = "text-amber-600"; subColor = "text-amber-400"; }
+        else if (anniversaryData) { dateColor = "text-pink-600"; subColor = "text-pink-400"; }
 
-        let badges = '';
-        if (holiday) badges += `<div class="mt-2 px-3 py-1 bg-red-100 text-red-600 rounded-full font-bold text-[0.65rem] border border-red-200 inline-block m-1">${holiday}</div>`;
-        if (cuti) badges += `<div class="mt-2 px-3 py-1 bg-red-50 text-red-500 rounded-full font-bold text-[0.65rem] border border-red-200 inline-block m-1">${cuti}</div>`;
-        if (obs) badges += `<div class="mt-2 px-3 py-1 bg-blue-50 text-blue-500 rounded-full font-bold text-[0.65rem] border border-blue-200 inline-block m-1">${obs}</div>`;
-        if (bday) badges += `<div class="mt-2 px-3 py-1 bg-amber-100 text-amber-700 rounded-full font-bold text-[0.65rem] border border-amber-200 inline-block m-1">🎉 ULTAH ${bday.name}</div>`;
-        if (anniv) badges += `<div class="mt-2 px-3 py-1 bg-pink-100 text-pink-700 rounded-full font-bold text-[0.65rem] border border-pink-200 inline-block m-1">💍 ANNIVERSARY</div>`;
+        let specialBadge = '';
+        if (holiday) specialBadge += `<div class="mt-2 px-3 py-1 bg-red-100 text-red-600 rounded-full font-bold text-[0.65rem] uppercase tracking-wide border border-red-200 inline-block mx-1 mb-1">${holiday}</div>`;
+        if (cutiName) specialBadge += `<div class="mt-2 px-3 py-1 bg-red-50 text-red-500 rounded-full font-bold text-[0.65rem] uppercase tracking-wide border border-red-200 inline-block mx-1 mb-1">${cutiName}</div>`;
+        if (observanceName) specialBadge += `<div class="mt-2 px-3 py-1 bg-blue-50 text-blue-500 rounded-full font-bold text-[0.65rem] uppercase tracking-wide border border-blue-200 inline-block mx-1 mb-1">${observanceName}</div>`;
+        if (birthdayData) {
+            const age = y - birthdayData.year;
+            specialBadge += `<div class="mt-2 px-3 py-1 bg-amber-100 text-amber-700 rounded-full font-bold text-[0.65rem] uppercase tracking-wide border border-amber-200 inline-block mx-1 mb-1">🎉 ULTAH ${birthdayData.name} KE-${age}</div>`;
+        }
+        if (anniversaryData) {
+            const annAge = y - weddingAnniversary.year;
+            specialBadge += `<div class="mt-2 px-3 py-1 bg-pink-100 text-pink-700 rounded-full font-bold text-[0.65rem] uppercase tracking-wide border border-pink-200 inline-block mx-1 mb-1">💍 ANNIVERSARY KE-${annAge}</div>`;
+        }
+
+        const pasaranText = settings.showPasaran ? pasaranName : '';
+        const hijriTextDisplay = settings.showHijri ? `${hDate} ${hMonth} 1447H` : '';
 
         body.innerHTML = `
-            <div class="flex flex-col items-center mb-6">
-                <div class="text-6xl font-black ${color} tracking-tighter">${d}</div>
-                <div class="text-xs font-bold uppercase mt-1 tracking-widest text-slate-400">${monthNames[m]} ${y}</div>
-                ${badges}
+            <div class="flex flex-col items-center justify-center mb-6">
+                <div class="text-6xl font-black ${dateColor} leading-none tracking-tighter">${d}</div>
+                <div class="text-xs font-bold ${subColor} uppercase mt-1 tracking-widest mb-1">${monthNames[m]} ${y}</div>
+                 ${specialBadge}
             </div>
             <div class="bg-white border border-slate-100 rounded-3xl p-4 shadow-sm mb-5">
-                <div class="text-xl font-black text-slate-800 uppercase">${dayName} ${settings.showPasaran ? pasaran : ''}</div>
-                <div class="text-sm font-medium text-slate-500 mt-1">${settings.showHijri ? hDate+' '+hMonth+' 1447H' : ''}</div> 
+                <div class="text-xl font-black text-slate-800 uppercase tracking-tight">${dayName} ${pasaranText}</div>
+                <div class="text-sm font-medium text-slate-500 mt-1">${hijriTextDisplay}</div> 
             </div>
-            <div class="p-5 bg-slate-50 rounded-3xl border border-slate-100">
-                <p class="text-sm italic text-slate-600 leading-relaxed font-medium">"${quotes[Math.floor(Math.random() * quotes.length)]}"</p>
+            <div class="p-5 bg-slate-50 rounded-3xl border border-slate-100 mb-4">
+                <i class="fas fa-quote-left text-slate-300 text-xl mb-2 block text-center"></i>
+                <p class="text-sm italic text-slate-600 leading-relaxed font-medium text-center">"${detailQuote}"</p>
             </div>
         `;
         openModal();
@@ -1131,14 +1148,14 @@
     function closeModal() { document.getElementById('selectorModal').classList.remove('active'); }
 
     function setupSwipe() {
-        let sx = 0;
+        let startX = 0;
         const area = document.getElementById('swipeArea');
-        area.addEventListener('touchstart', e => sx = e.changedTouches[0].screenX, { passive: true });
-        area.addEventListener('touchend', e => {
-            const ex = e.changedTouches[0].screenX;
-            if (ex < sx - 60) changeMonth(1);
-            if (ex > sx + 60) changeMonth(-1);
-        }, { passive: true });
+        area.addEventListener('touchstart', e => { startX = e.changedTouches[0].screenX; }, {passive: false});
+        area.addEventListener('touchend', e => { 
+            const endX = e.changedTouches[0].screenX;
+            if (endX < startX - 60) changeMonth(1);
+            if (endX > startX + 60) changeMonth(-1);
+        }, {passive: false});
     }
 
     window.onload = init;
