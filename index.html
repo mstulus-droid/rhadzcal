@@ -1067,6 +1067,8 @@
         container.style.opacity = '0';
         container.style.transform = dir > 0 ? 'translateX(-15%)' : 'translateX(15%)';
         setTimeout(() => {
+            // FIX: Set date to 1st to avoid skipping months with fewer days (e.g. Jan 30 -> Feb -> Mar)
+            currentDate.setDate(1); 
             currentDate.setMonth(currentDate.getMonth() + dir);
             renderCalendar();
             updateQuote();
@@ -1234,6 +1236,7 @@
         const activeM = document.querySelector('#monthScroller .active');
         const activeY = document.querySelector('#yearScroller .active');
         if(activeM && activeY) {
+            currentDate.setDate(1); // Safety fix
             currentDate.setMonth(parseInt(activeM.dataset.value));
             currentDate.setFullYear(parseInt(activeY.dataset.value));
             renderCalendar();
