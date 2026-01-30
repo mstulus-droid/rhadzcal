@@ -15,7 +15,7 @@
     <!-- Link ke Manifest -->
     <link rel="manifest" href="manifest.json">
     
-    <!-- Icon (Opsional: Ganti URL dengan icon milikmu) -->
+    <!-- Icon -->
     <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/3652/3652191.png">
     <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/3652/3652191.png">
 
@@ -64,8 +64,8 @@
             justify-content: space-between;
             position: relative;
             z-index: 20;
-            height: 70px;
-            padding-top: env(safe-area-inset-top); /* Support notch iPhone/Android modern */
+            height: 80px; /* Ditambah sedikit untuk notch */
+            padding-top: env(safe-area-inset-top);
         }
 
         .header-left, .header-right {
@@ -172,7 +172,7 @@
             flex: 1;
             overflow-y: auto;
             padding: 1rem;
-            padding-bottom: 6rem;
+            padding-bottom: 7rem;
             scrollbar-width: none;
         }
         .main-content::-webkit-scrollbar { display: none; }
@@ -469,12 +469,22 @@
 </div>
 
 <script>
-    // Konfigurasi PWA: Service Worker Register (Opsional untuk offline)
+    // Service Worker Minimal agar bisa diinstall sebagai PWA
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
-            navigator.serviceWorker.register('sw.js').then(() => {
-                console.log('Service Worker Registered');
-            }).catch(err => console.log('SW Registration failed', err));
+            const swCode = `
+                self.addEventListener('install', (e) => {
+                    self.skipWaiting();
+                });
+                self.addEventListener('fetch', (e) => {
+                    e.respondWith(fetch(e.request));
+                });
+            `;
+            const blob = new Blob([swCode], {type: 'text/javascript'});
+            const swUrl = URL.createObjectURL(blob);
+            navigator.serviceWorker.register(swUrl).then(() => {
+                console.log('SW Registered');
+            });
         });
     }
 
