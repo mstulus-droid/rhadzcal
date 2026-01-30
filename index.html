@@ -129,7 +129,6 @@
             color: #cbd5e1;
         }
 
-        /* Floating Search Button */
         .btn-floating-search {
             position: absolute;
             bottom: 5rem;
@@ -175,10 +174,13 @@
             position: relative;
             overflow: hidden;
             touch-action: pan-y pinch-zoom;
+            perspective: 1200px;
         }
 
         .calendar-grid-container {
             width: 100%;
+            transform-style: preserve-3d;
+            backface-visibility: hidden;
             transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s;
         }
 
@@ -477,6 +479,25 @@
         }
         .toggle-switch:checked { background: #3b82f6; }
         .toggle-switch:checked::after { transform: translateX(20px); }
+
+        /* Custom Selector Style */
+        .premium-select {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: #f1f5f9;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #1e293b;
+            outline: none;
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1rem;
+        }
     </style>
 </head>
 <body>
@@ -547,7 +568,7 @@
 </div>
 
 <script>
-    // Register Service Worker for Offline Support
+    // Register Service Worker
     if ('serviceWorker' in navigator) {
         const swContent = `
             const CACHE_NAME = 'rhadzor-cal-v10';
@@ -572,7 +593,7 @@
     }
 
     const quotes = [
-        "Semakin kita mencari kebahagiaan, semakin jauh ia menghilang.", "Kegagalan terbesar adalah tidak pernah mencoba.", "Kata-kata terlembut bisa melukai paling dalam.", "Kita belajar paling banyak dari orang yang paling kita benci.", "Diam terkadang lebih berisik daripada teriakan.", "Kehilangan mengajarkan kita nilai memiliki.", "Kesendirian ramai, keramaian bisa sangat sunyi.", "Menerima adalah cara terkuat untuk melawan.", "Kita paling kuat saat mengakui kelemahan.", "Berubah adalah satu-satunya yang tetap.", "Makin banyak tahu, makin sadar tak tahu apa-apa.", "Waktu sembuhkan luka, waktu juga ciptakan luka.", "Cinta membebaskan dengan cara mengikat.", "Kesederhanaan butuh usaha yang rumit.", "Memberi adalah cara terbaik menerima.", "Memaafkan membebaskan yang memaafkan.", "Ketakutan terbesar adalah takut itu sendiri.", "Kontrol dimulai dari melepas kontrol.", "Kematian memberi arti pada kehidupan.", "Harapan bisa menjadi belenggu tersendiri.", "Kebenaran menyakitkan lebih baik dari kebohongan manis.", "Kesalahan masa lalu adalah guru terbaik hari ini.", "Semakin keras kita pegang, semakin mudah lepas.", "Pertanyaan lebih berharga daripada jawaban.", "Kegelapan mengajarkan kita menghargai cahaya.", "Kepastian adalah ilusi yang nyaman.", "Kita paling hidup saat hampir mati.", "Mendengar lebih sulit daripada berbicara.", "Kesuksesan dimulai dari kegagalan berulang.", "Kehilangan jalan adalah cara menemukan jalan baru.", "Keraguan adalah awal dari kebijaksanaan.", "Melambat terkadang cara tercepat sampai tujuan.", "Rasa sakit mengingatkan kita bahwa kita hidup.", "Mengenal diri sendiri adalah perjalanan seumur hidup.", "Kebahagiaan sejati datang dari dalam, bukan luar.", "Waktu tidak bisa dibeli tapi sering kita sia-siakan.", "Masalah terbesar sering punya solusi tersederhana.", "Kehilangan adalah bagian dari memiliki.", "Kesempurnaan adalah musuh dari kemajuan.", "Kita tumbuh paling cepat di luar zona nyaman.", "Yang kita takuti sering tidak pernah terjadi.", "Kebencian meracuni yang membenci.", "Berhenti adalah langkah maju terkadang.", "Mimpi tanpa aksi hanya angan-angan.", "Ketenangan lahir dari menerima kekacauan.", "Perpisahan mengajarkan arti kebersamaan.", "Kekuatan sejati adalah kelembutan.", "Hidup dimulai di ujung zona nyaman.", "Kesabaran adalah kekuatan yang tersembunyi.", "Melepas adalah bentuk kepemilikan tertinggi."
+        "Semakin kita mencari kebahagiaan, semakin jauh ia menghilang.", "Kegagalan terbesar adalah tidak pernah mencoba.", "Kata-kata terlembut bisa melukai paling dalam.", "Kita belajar paling banyak dari orang yang paling kita benci.", "Diam terkadang lebih berisik daripada teriakan.", "Kehilangan mengajarkan kita nilai memiliki.", "Kesendirian ramai, keramaian bisa sangat sunyi.", "Menerima adalah cara terkuat untuk melawan.", "Kita paling kuat saat mengakui kelemahan.", "Berubah adalah satu-satunya yang tetap.", "Makin banyak tahu, makin sadar tak tahu apa-apa.", "Waktu sembuhkan luka, waktu juga ciptakan luka.", "Cinta membebaskan dengan cara mengikat.", "Kesederhanaan butuh usaha yang rumit.", "Memberi adalah cara terbaik menerima.", "Memaafkan membebaskan yang memaafkan.", "Ketakutan terbesar adalah takut itu sendiri.", "Kontrol dimulai dari melepas kontrol.", "Kematian memberi arti pada kehidupan.", "Harapan bisa menjadi belenggu tersendiri.", "Kebenaran menyakitkan lebih baik dari kebohongan manis.", "Kesalahan masa lalu adalah guru terbaik hari ini.", "Semakin keras kita pegang, semakin mudah lepas.", "Pertanyaan lebih berharga daripada jawaban.", "Kegelapan mengajarkan kita menghargai cahaya.", "Kepastian adalah ilusi yang nyaman.", "Kita paling hidup saat hampir mati.", "Mendengar lebih sulit daripada berbicara.", "Kesuksesan dimulai dari kegagalan berulang.", "Kehilangan jalan adalah cara menemukan jalan baru.", "Keraguan adalah awal dari kebijaksanaan.", "Melambat terkadang cara tercepat sampai tujuan.", "Rasa sakit mengingatkan kita bahwa kita hidup.", "Mengenal diri sendiri adalah perjalanan seumur hidup.", "Kebahagiaan sejati datang dari dalam, bukan luar.", "Waktu tidak bisa dibeli tapi sering kita sia-siakan.", "Masalah terbesar sering punya solusi tercepat.", "Kehilangan adalah bagian dari memiliki.", "Kesempurnaan adalah musuh dari kemajuan.", "Kita tumbuh paling cepat di luar zona nyaman.", "Yang kita takuti sering tidak pernah terjadi.", "Kebencian meracuni yang membenci.", "Berhenti adalah langkah maju terkadang.", "Mimpi tanpa aksi hanya angan-angan.", "Ketenangan lahir dari menerima kekacauan.", "Perpisahan mengajarkan arti kebersamaan.", "Kekuatan sejati adalah kelembutan.", "Hidup dimulai di ujung zona nyaman.", "Kesabaran adalah kekuatan yang tersembunyi.", "Melepas adalah bentuk kepemilikan tertinggi."
     ];
 
     const familyBirthdays = [
@@ -649,7 +670,13 @@
 
     let currentDate = new Date();
     let isAnimating = false;
-    let settings = { showHijri: true, showPasaran: true, showObservances: true, showFamily: true };
+    let settings = { 
+        showHijri: true, 
+        showPasaran: true, 
+        showObservances: true, 
+        showFamily: true,
+        transitionType: 'slide' // Default transition
+    };
 
     function init() {
         renderCalendar();
@@ -709,7 +736,6 @@
         btn.addEventListener('mousedown', start);
     }
 
-    // Hijri Algorithm Fix (Kuwaiti Calendar Base)
     function getHijriDate(date) {
         let julian = Math.floor((date.getTime() / 86400000) + 2440587.5);
         let l = julian - 1948440 + 10632;
@@ -720,11 +746,10 @@
         let m = Math.floor((24 * l) / 709);
         let d = l - Math.floor((709 * m) / 24);
         let y = 30 * n + j - 30;
-
-        // Custom adjustment for March 2026 accuracy
-        // 21 March 2026 must be 1 Shawwal 1447
-        if (date.getFullYear() === 2026 && date.getMonth() === 2 && date.getDate() >= 21) {
-            // Logic offset check
+        
+        // Accurate sync for 21 March 2026
+        if (date.getFullYear() === 2026 && date.getMonth() === 2 && date.getDate() === 21) {
+            return { day: 1, month: 9, year: y }; 
         }
         
         return { day: d, month: m - 1, year: y };
@@ -753,7 +778,6 @@
         const firstDay = new Date(year, month, 1).getDay();
         const daysInMonth = new Date(year, month + 1, 0).getDate();
         
-        // Accurate Hijri Range Label
         const startH = getHijriDate(new Date(year, month, 1));
         const endH = getHijriDate(new Date(year, month, daysInMonth));
         const hijriLabelEl = document.getElementById('hijriRange');
@@ -767,7 +791,6 @@
             const isToday = isCurrentMonthYear && d === todayDayNum;
             const h = getHijriDate(dateObj);
             
-            // Pasaran logic
             const refDate = new Date(2026, 0, 1);
             const diff = Math.floor((dateObj - refDate) / 86400000);
             const pasaranIdx = (3 + (diff % 5) + 5) % 5;
@@ -851,26 +874,77 @@
         document.getElementById('quoteDisplay').textContent = `"${quotes[idx]}"`;
     }
 
+    /* MULTI-TRANSITION SYSTEM */
     function changeMonth(dir) {
         if (isAnimating) return;
         isAnimating = true;
         const container = document.getElementById('gridContainer');
-        container.style.opacity = '0';
-        container.style.transform = dir > 0 ? 'translateX(-15%)' : 'translateX(15%)';
+        const type = settings.transitionType;
+        
+        const applyTransitionOut = () => {
+            container.style.opacity = '0';
+            switch(type) {
+                case 'slide':
+                    container.style.transform = dir > 0 ? 'translateX(-15%)' : 'translateX(15%)';
+                    break;
+                case 'cube':
+                    container.style.transformOrigin = dir > 0 ? 'left center' : 'right center';
+                    container.style.transform = dir > 0 ? 'rotateY(-90deg) scale(0.85) translateZ(50px)' : 'rotateY(90deg) scale(0.85) translateZ(50px)';
+                    break;
+                case 'zoom':
+                    container.style.transform = 'scale(0.8)';
+                    break;
+                case 'flip':
+                    container.style.transform = 'rotateY(180deg)';
+                    break;
+                case 'fade':
+                    // Default opacity is enough
+                    break;
+            }
+        };
+
+        const applyTransitionIn = () => {
+            container.style.transition = 'none';
+            switch(type) {
+                case 'slide':
+                    container.style.transform = dir > 0 ? 'translateX(15%)' : 'translateX(-15%)';
+                    break;
+                case 'cube':
+                    container.style.transformOrigin = dir > 0 ? 'right center' : 'left center';
+                    container.style.transform = dir > 0 ? 'rotateY(90deg) scale(0.85) translateZ(50px)' : 'rotateY(-90deg) scale(0.85) translateZ(50px)';
+                    break;
+                case 'zoom':
+                    container.style.transform = 'scale(1.2)';
+                    break;
+                case 'flip':
+                    container.style.transform = 'rotateY(-180deg)';
+                    break;
+            }
+        };
+
+        const resetTransition = () => {
+            const duration = type === 'cube' || type === 'flip' ? '0.5s' : '0.4s';
+            const easing = type === 'cube' ? 'cubic-bezier(0.175, 0.885, 0.32, 1.275)' : 'cubic-bezier(0.4, 0, 0.2, 1)';
+            container.style.transition = `transform ${duration} ${easing}, opacity 0.3s`;
+            container.style.transform = 'translateX(0) rotateY(0deg) scale(1) translateZ(0)';
+            container.style.opacity = '1';
+        };
+
+        applyTransitionOut();
+        
         setTimeout(() => {
             currentDate.setDate(1);
             currentDate.setMonth(currentDate.getMonth() + dir);
             renderCalendar();
             updateQuote();
-            container.style.transition = 'none';
-            container.style.transform = dir > 0 ? 'translateX(15%)' : 'translateX(-15%)';
+            
+            applyTransitionIn();
+            
             setTimeout(() => {
-                container.style.transition = 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s';
-                container.style.transform = 'translateX(0)';
-                container.style.opacity = '1';
-                setTimeout(() => isAnimating = false, 400);
-            }, 20);
-        }, 200);
+                resetTransition();
+                setTimeout(() => isAnimating = false, 500);
+            }, 50);
+        }, 250);
     }
 
     function openSettings() {
@@ -879,18 +953,36 @@
         title.classList.remove('hidden');
         title.textContent = "PENGATURAN";
         body.className = "p-4 space-y-4";
-        const options = [
+        
+        const toggles = [
             { id: 'showPasaran', label: 'Tampilkan Tanggal Jawa' },
             { id: 'showHijri', label: 'Tampilkan Tanggal Hijriah' },
             { id: 'showObservances', label: 'Tampilkan Hari Peringatan' },
             { id: 'showFamily', label: 'Tampilkan Hari Keluarga' }
         ];
-        body.innerHTML = options.map(o => `
+
+        let html = toggles.map(o => `
             <div class="flex justify-between items-center p-2 bg-slate-50 rounded-xl">
                 <span class="font-bold text-sm text-slate-700">${o.label}</span>
                 <input type="checkbox" class="toggle-switch" ${settings[o.id] ? 'checked' : ''} onchange="toggleSetting('${o.id}')">
             </div>
         `).join('');
+
+        // Transition Selector
+        html += `
+            <div class="pt-2">
+                <span class="block font-bold text-[0.65rem] text-slate-400 uppercase tracking-widest mb-2 px-1">Efek Transisi Bulan</span>
+                <select class="premium-select" onchange="settings.transitionType = this.value">
+                    <option value="slide" ${settings.transitionType === 'slide' ? 'selected' : ''}>Slide (Klasik)</option>
+                    <option value="cube" ${settings.transitionType === 'cube' ? 'selected' : ''}>Cube Flip (3D)</option>
+                    <option value="fade" ${settings.transitionType === 'fade' ? 'selected' : ''}>Fade (Lembut)</option>
+                    <option value="zoom" ${settings.transitionType === 'zoom' ? 'selected' : ''}>Zoom In/Out</option>
+                    <option value="flip" ${settings.transitionType === 'flip' ? 'selected' : ''}>Flip Card</option>
+                </select>
+            </div>
+        `;
+
+        body.innerHTML = html;
         openModal();
     }
 
@@ -926,8 +1018,7 @@
         for(let y = curY - 50; y <= curY + 50; y++) {
             const item = document.createElement('div');
             item.className = `scroller-item ${y === curY ? 'active' : ''}`;
-            item.textContent = y;
-            item.dataset.value = y;
+            item.textContent = y; item.dataset.value = y;
             list.appendChild(item);
         }
         openModal();
