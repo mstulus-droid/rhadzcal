@@ -106,8 +106,8 @@
                 padding: 1rem;
                 background: #f1f5f9;
                 scroll-behavior: smooth;
-                /* Add padding bottom to ensure last content isn't hidden by footer visual perception */
-                padding-bottom: 2rem; 
+                /* PADDING BOTTOM DITAMBAH AGAR TIDAK KETUTUP FOOTER */
+                padding-bottom: 7rem; 
             }
             
             .footer-rhadzor {
@@ -525,7 +525,8 @@
         </div>
 
         <!-- WRAPPER KETERANGAN (SCROLL DI MOBILE) -->
-        <div class="info-section-mobile">
+        <!-- ID DITAMBAHKAN UNTUK SCROLLING LOGIC -->
+        <div class="info-section-mobile" id="mobileInfoSection">
             <div class="space-y-2 mt-2" id="holidayContainerMobile"></div>
             <div class="quote-minimalist mt-8 text-center px-4 pb-8">
                 <p class="text-xs text-slate-500 italic" id="quoteDisplayMobile">"Kata bijak di sini"</p>
@@ -930,14 +931,21 @@
         document.getElementById('holidayContainerMobile').innerHTML = htmlContent;
         document.getElementById('holidayContainerDesktop').innerHTML = htmlContent;
 
-        // --- AUTO SCROLL KE EVENT HARI INI ---
-        setTimeout(() => {
-            const todayEvent = document.querySelector('.highlight-today');
-            if (todayEvent) {
-                // Gunakan block: 'center' atau 'nearest' agar tidak terlalu drastis menggeser layout
-                todayEvent.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'nearest' });
-            }
-        }, 600); 
+        // --- RESET & AUTO SCROLL LOGIC ---
+        const mobileContainer = document.getElementById('mobileInfoSection');
+        if (mobileContainer) {
+            // 1. Reset scroll ke atas dulu setiap kali render ulang
+            mobileContainer.scrollTop = 0;
+
+            // 2. Cek apakah ada event hari ini
+            setTimeout(() => {
+                const todayEvent = document.querySelector('.highlight-today');
+                if (todayEvent) {
+                    // Jika ada, scroll ke elemen tersebut
+                    todayEvent.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'nearest' });
+                }
+            }, 600); 
+        }
     }
 
     function goToToday() {
