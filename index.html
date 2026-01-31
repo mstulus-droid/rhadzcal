@@ -39,7 +39,6 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        /* --- CONTAINER UTAMA --- */
         .app-container {
             width: 100%;
             height: 100%;
@@ -82,7 +81,6 @@
             .desktop-right-panel { display: flex !important; }
         }
 
-        /* --- COMPONENTS --- */
         .header-rhadzor {
             background: var(--premium-gradient);
             padding: 0 1rem;
@@ -100,6 +98,14 @@
         .nav-arrow { padding: 0.5rem; cursor: pointer; opacity: 0.6; transition: 0.2s; }
         .nav-arrow:hover { opacity: 1; }
         .hijri-label { font-size: 0.6rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.6; color: #cbd5e1; }
+
+        .month-year-title {
+            display: flex;
+            gap: 0.5rem;
+            font-size: 1.15rem; 
+            font-weight: 800;
+            letter-spacing: -0.025em;
+        }
 
         .desktop-sidebar {
             width: 280px;
@@ -133,11 +139,11 @@
             flex-direction: column;
         }
         @media (min-width: 1024px) {
-            .main-content { padding: 2rem; padding-bottom: 2rem; background: white; }
+            /* REVISI: Pastikan tidak scrolling di PC */
+            .main-content { padding: 1.5rem 2rem; overflow: hidden; background: white; }
         }
         .main-content::-webkit-scrollbar { display: none; }
 
-        /* --- CALENDAR GRID --- */
         .calendar-card {
             background: #f8fafc;
             border-radius: 24px;
@@ -145,7 +151,7 @@
             position: relative;
             touch-action: pan-y pinch-zoom;
             box-shadow: 8px 8px 16px #cbd5e1, -8px -8px 16px #ffffff;
-            perspective: 1200px; /* Enable 3D transitions */
+            perspective: 1200px;
         }
 
         @media (min-width: 1024px) {
@@ -153,14 +159,15 @@
                 box-shadow: none;
                 background: transparent;
                 padding: 0;
-                height: 100%;
+                flex: 1; /* Ambil sisa ruang vertikal */
                 display: flex;
                 flex-direction: column;
+                overflow: hidden;
             }
             .calendar-grid-container { height: 100%; }
             .calendar-grid { 
                 height: 100%; 
-                grid-template-rows: 40px repeat(6, 1fr);
+                grid-template-rows: 30px repeat(6, 1fr); /* Perkecil header hari di PC */
             }
         }
 
@@ -168,7 +175,6 @@
             width: 100%;
             transform-style: preserve-3d;
             backface-visibility: hidden;
-            /* Transition handled via JS now */
         }
 
         .calendar-grid {
@@ -177,7 +183,7 @@
             gap: 4px;
         }
 
-        @media (min-width: 1024px) { .calendar-grid { gap: 10px; } }
+        @media (min-width: 1024px) { .calendar-grid { gap: 8px; } }
 
         .day-label {
             text-align: center; font-size: 0.7rem; font-weight: 800;
@@ -195,27 +201,45 @@
             color: #1e293b; border: 1px solid transparent;
         }
 
+        .day-cell.other-month {
+            opacity: 0.25;
+            transform: scale(0.9);
+            font-size: 0.9rem;
+            pointer-events: none;
+        }
+
         @media (min-width: 1024px) {
             .day-cell {
                 aspect-ratio: auto;
-                min-height: 80px;
+                /* REVISI: min-height dikurangi agar muat tanpa scrolling di PC */
+                min-height: 40px; 
                 border-radius: 12px;
                 background: #f8fafc;
-                align-items: center; /* Centered as requested */
+                align-items: center;
                 justify-content: center;
-                padding: 4px;
+                padding: 2px;
             }
             .day-cell .date-wrapper {
-                font-size: 1.6rem;
+                font-size: 1.4rem; /* Disesuaikan dikit */
                 font-weight: 700;
-                margin-bottom: 2px;
+                margin-bottom: 1px;
             }
-            .day-cell:hover { background: #e2e8f0; transform: translateY(-2px); }
-            .hijri-text { top: 6px; right: 8px; }
-            .pasaran-text { margin-top: 0; align-self: center; font-size: 0.65rem !important; opacity: 0.7; }
+            .day-cell:hover:not(.other-month) { background: #e2e8f0; transform: translateY(-2px); }
+            .hijri-text { top: 4px; right: 6px; font-size: 0.6rem !important; }
+            .pasaran-text { margin-top: 0; align-self: center; font-size: 0.6rem !important; opacity: 0.7; }
         }
         
         .day-cell.today { background: var(--premium-gradient); color: white !important; box-shadow: 0 8px 16px rgba(30, 27, 75, 0.25); transform: scale(1.02); z-index: 2; border: none; }
+        
+        @keyframes attractive-pulse {
+            0% { box-shadow: 0 0 0 0px rgba(30, 27, 75, 0.4); transform: scale(1.02); }
+            50% { box-shadow: 0 0 0 15px rgba(30, 27, 75, 0); transform: scale(1.1); }
+            100% { box-shadow: 0 0 0 0px rgba(30, 27, 75, 0); transform: scale(1.02); }
+        }
+        .today-jump-animation {
+            animation: attractive-pulse 0.8s ease-out 2;
+        }
+
         .day-cell.birthday { background: var(--gold-gradient); color: white !important; box-shadow: 0 4px 12px rgba(217, 119, 6, 0.4); border: 2px solid white; z-index: 3; }
         .day-cell.anniversary { background: var(--romance-gradient); color: white !important; box-shadow: 0 4px 12px rgba(190, 24, 93, 0.4); border: 2px solid white; z-index: 3; }
         .day-cell.sunday, .day-cell.holiday { color: #ef4444; }
@@ -227,23 +251,30 @@
         .obs-dot { bottom: 2px; left: -6px; background-color: #3b82f6; }
         
         @media (min-width: 1024px) {
-            .cuti-dot { bottom: 4px; right: -6px; width: 6px; height: 6px; }
-            .obs-dot { bottom: 4px; left: -6px; width: 6px; height: 6px; }
+            .cuti-dot { bottom: 3px; right: -6px; width: 5px; height: 5px; }
+            .obs-dot { bottom: 3px; left: -6px; width: 5px; height: 5px; }
         }
         
         .pasaran-text { font-size: 0.5rem; font-weight: 500; opacity: 0.6; margin-top: 4px; }
         .hijri-text { font-size: 0.5rem; position: absolute; top: 4px; right: 5px; opacity: 0.5; }
         .hidden-element { display: none !important; }
 
-        /* LIST & UTILS */
         .holiday-item, .observance-item, .birthday-item, .anniversary-item {
             padding: 0.85rem 1rem; background: #ffffff; border-radius: 16px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05); margin-bottom: 0.5rem; transition: transform 0.2s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05); margin-bottom: 0.5rem; transition: all 0.3s ease;
+            position: relative; overflow: hidden;
         }
         .holiday-item { border-left: 4px solid #ef4444; }
         .observance-item { border-left: 4px solid #3b82f6; }
         .birthday-item { background: #fffbeb; border-left: 4px solid #d97706; }
         .anniversary-item { background: #fdf2f8; border-left: 4px solid #be185d; }
+
+        .highlight-today {
+            background-color: #fef9c3 !important; 
+            box-shadow: 0 4px 6px -1px rgba(250, 204, 21, 0.1), 0 2px 4px -1px rgba(250, 204, 21, 0.06) !important;
+            transform: scale(1.02);
+            z-index: 5;
+        }
         
         .event-list-container:empty::before {
             content: 'Tidak ada agenda bulan ini';
@@ -299,7 +330,7 @@
         
         .desktop-header-controls {
             display: none; justify-content: space-between; align-items: center;
-            margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid #e2e8f0;
+            margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid #e2e8f0;
         }
         @media (min-width: 1024px) { .desktop-header-controls { display: flex; } }
 
@@ -315,7 +346,6 @@
         .toggle-switch:checked { background: #3b82f6; }
         .toggle-switch:checked::after { transform: translateX(18px); }
 
-        /* Premium Select for Transitions */
         .premium-select {
             width: 100%; padding: 0.75rem 1rem; background: #f1f5f9;
             border: 1px solid #e2e8f0; border-radius: 12px;
@@ -350,7 +380,6 @@
                 </div>
             </div>
 
-            <!-- Settings in Sidebar -->
             <div class="space-y-4 mb-8">
                 <p class="text-xs font-bold opacity-50 uppercase tracking-widest mb-2">Tampilan</p>
                 <div class="flex justify-between items-center">
@@ -378,7 +407,6 @@
                 </select>
             </div>
 
-            <!-- Quick Jump -->
              <button onclick="goToToday()" class="w-full bg-white/10 hover:bg-white/20 transition p-3 rounded-xl flex items-center justify-center gap-2 mb-2 font-bold text-sm">
                 <i class="fas fa-calendar-day"></i> Hari Ini
             </button>
@@ -387,7 +415,6 @@
             </button>
         </div>
 
-        <!-- Footer Sidebar -->
         <div class="text-center opacity-40 text-xs">
             &copy; 2026 Rhadzor Family<br>V10 Final
         </div>
@@ -421,7 +448,6 @@
     <!-- === MAIN CONTENT === -->
     <main class="main-content">
         
-        <!-- DESKTOP HEADER (Top of Main) -->
         <div class="desktop-header-controls">
             <div>
                 <h2 class="text-3xl font-black text-slate-800 tracking-tight" id="desktopMonthYear">JANUARI 2026</h2>
@@ -439,7 +465,6 @@
             </div>
         </div>
 
-        <!-- LIST: On Mobile displayed here, on Desktop hidden (moved to right panel) -->
         <div class="lg:hidden space-y-2 mt-6" id="holidayContainerMobile"></div>
 
         <div class="lg:hidden quote-minimalist mt-8 text-center px-6">
@@ -452,7 +477,6 @@
         <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest mb-4">Agenda Bulan Ini</h3>
         
         <div id="holidayContainerDesktop" class="space-y-3 event-list-container flex-1">
-            <!-- Content duplicated via JS -->
         </div>
 
         <div class="mt-auto pt-6 border-t border-slate-200">
@@ -461,7 +485,6 @@
         </div>
     </div>
 
-    <!-- Floating Search (Mobile Only) -->
     <div id="searchBtn" class="btn-floating-search lg:hidden">
         <i class="fas fa-search"></i>
     </div>
@@ -472,7 +495,6 @@
     </footer>
 </div>
 
-<!-- Modal Universal -->
 <div class="modal-overlay" id="selectorModal" onclick="closeModal()">
     <div class="modal-content" onclick="event.stopPropagation()">
         <div class="modal-header-line"></div>
@@ -492,7 +514,8 @@
 
     const familyBirthdays = [
         { name: "Rhadzor", day: 28, month: 5, year: 1986 }, 
-        { name: "Lisa Istri Tercinta ❤️❤️", day: 22, month: 6, year: 1988 }, 
+        // REVISI: Nama Lisa dihapus
+        { name: "Istri Tercinta ❤️❤️", day: 22, month: 6, year: 1988 }, 
         { name: "Alby", day: 3, month: 8, year: 2013 }, 
         { name: "Meka", day: 2, month: 3, year: 2020 }, 
         { name: "Sansa", day: 21, month: 3, year: 2022 } 
@@ -565,8 +588,8 @@
     let currentDate = new Date();
     let isAnimating = false;
     let isDragging = false;
+    let highlightTriggered = false; 
     
-    // STATE SETTINGS (Includes Transition Type from RhadzCal)
     let settings = {
         showHijri: true,
         showPasaran: true,
@@ -581,19 +604,15 @@
         updateQuote();
         setupSwipe();
         setupDrag();
-        
-        // Listener untuk resize window agar layout update jika perlu
         window.addEventListener('resize', renderCalendar);
     }
 
     function syncSettingsUI() {
-        // Sync desktop checkbox with state
         document.getElementById('dsk-pasaran').checked = settings.showPasaran;
         document.getElementById('dsk-hijri').checked = settings.showHijri;
         document.getElementById('dsk-obs').checked = settings.showObservances;
     }
 
-    // --- DRAG LOGIC (MOBILE ONLY) ---
     function setupDrag() {
         const btn = document.getElementById('searchBtn');
         let offsetX, offsetY, startTime;
@@ -644,11 +663,6 @@
         btn.addEventListener('mousedown', start);
     }
 
-    function handleSearchClick() {
-        if (!isDragging) openDateSearch();
-    }
-
-    // --- ACCURATE HIJRI FUNCTION (FROM RHADZCAL) ---
     function getHijriDate(date) {
         let julian = Math.floor((date.getTime() / 86400000) + 2440587.5);
         let l = julian - 1948440 + 10632;
@@ -660,7 +674,6 @@
         let d = l - Math.floor((709 * m) / 24);
         let y = 30 * n + j - 30;
         
-        // Manual Correction for specific dates if needed (e.g. 21 March 2026)
         if (date.getFullYear() === 2026 && date.getMonth() === 2 && date.getDate() === 21) {
             return { day: 1, month: 9, year: y }; 
         }
@@ -668,7 +681,6 @@
         return { day: d, month: m - 1, year: y };
     }
 
-    // --- DATA HELPERS ---
     function getHolidayName(d, m, y) {
         if (holidaysData[y] && holidaysData[y][m] && holidaysData[y][m][d]) return holidaysData[y][m][d];
         return null;
@@ -690,7 +702,6 @@
         return weddingAnniversary.day === d && weddingAnniversary.month === m;
     }
 
-    // --- CORE RENDER ---
     function renderCalendar() {
         const year = currentDate.getFullYear();
         const month = currentDate.getMonth();
@@ -698,105 +709,130 @@
         const isCurrentMonthYear = (now.getFullYear() === year && now.getMonth() === month);
         const todayDayNum = now.getDate();
         
-        // Update Labels (Mobile)
         document.getElementById('monthLabelMobile').textContent = monthNames[month];
         document.getElementById('yearLabelMobile').textContent = year;
-        
-        // Update Labels (Desktop)
         document.getElementById('desktopMonthYear').textContent = `${monthNames[month]} ${year}`;
         
-        // Hijri Logic (Calculated)
         const daysInMonth = new Date(year, month + 1, 0).getDate();
+        const firstDay = new Date(year, month, 1).getDay();
+        
         const startH = getHijriDate(new Date(year, month, 1));
         const endH = getHijriDate(new Date(year, month, daysInMonth));
         const hijriStr = `${hijriMonths[startH.month]} - ${hijriMonths[endH.month]}`;
         
         document.getElementById('hijriRangeMobile').textContent = hijriStr;
-        document.getElementById('desktopHijri').textContent = hijriStr + " 1447H"; // Estimate Year
+        document.getElementById('desktopHijri').textContent = hijriStr + " 1447H";
         
-        // Visibilitas Hijri
-        const d = settings.showHijri ? 'block' : 'none';
-        document.getElementById('hijriRangeMobile').style.display = d;
-        document.getElementById('desktopHijri').style.display = d;
+        const d_hijri = settings.showHijri ? 'block' : 'none';
+        document.getElementById('hijriRangeMobile').style.display = d_hijri;
+        document.getElementById('desktopHijri').style.display = d_hijri;
 
         const grid = document.getElementById('calendarGrid');
         grid.innerHTML = '';
         
-        // Render Header Hari
         dayShortNames.forEach(d => {
             const el = document.createElement('div');
             el.className = 'day-label';
             el.textContent = d;
             grid.appendChild(el);
         });
-        
-        const firstDay = new Date(year, month, 1).getDay();
-        
-        for (let i = 0; i < firstDay; i++) {
-            grid.appendChild(document.createElement('div'));
-        }
-        
-        for (let d = 1; d <= daysInMonth; d++) {
-            const dateObj = new Date(year, month, d);
-            const isToday = isCurrentMonthYear && d === todayDayNum;
-            const h = getHijriDate(dateObj); // Use precise logic
-            
-            const dayOfWeek = dateObj.getDay();
-            const isSunday = dayOfWeek === 0;
-            const isFriday = dayOfWeek === 5;
-            
-            const holidayName = getHolidayName(d, month, year);
-            const isHoliday = !!holidayName;
-            const cutiName = getCutiBersamaName(d, month, year);
-            const isCuti = !!cutiName;
-            const observanceName = getObservanceName(d, month);
-            const isObservance = !!observanceName;
-            const birthdayData = getBirthday(d, month);
-            const isBirthday = !!birthdayData;
-            const anniversaryData = isAnniversary(d, month);
-            
-            // Pasaran Calculation
-            const refDate = new Date(2026, 0, 1);
-            const diff = Math.floor((dateObj - refDate) / 86400000);
-            const pasaranIdx = (3 + (diff % 5) + 5) % 5;
-            
+
+        const totalCells = 42;
+        const prevMonthLastDate = new Date(year, month, 0).getDate();
+
+        for (let i = 0; i < totalCells; i++) {
             const cell = document.createElement('div');
-            let cellClass = `day-cell ${isToday ? 'today' : ''}`;
-            if (anniversaryData) cellClass += ' anniversary';
-            else if (isBirthday) cellClass += ' birthday';
-            else if (isSunday || isHoliday) cellClass += ' sunday';
-            else if (isFriday) cellClass += ' friday';
-            
-            cell.className = cellClass;
-            cell.id = isToday ? 'currentDayCell' : '';
+            let displayDate, targetMonth, targetYear, isOtherMonth = false;
 
-            const hijriClass = settings.showHijri ? 'hijri-text' : 'hijri-text hidden-element';
-            const pasaranClass = settings.showPasaran ? 'pasaran-text' : 'pasaran-text hidden-element';
-            
-            const cutiDotHTML = isCuti ? `<div class="cuti-dot"></div>` : '';
-            const obsDotHTML = isObservance ? `<div class="obs-dot"></div>` : '';
+            if (i < firstDay) {
+                displayDate = prevMonthLastDate - (firstDay - i - 1);
+                targetMonth = month - 1;
+                targetYear = year;
+                isOtherMonth = true;
+            } else if (i < firstDay + daysInMonth) {
+                displayDate = i - firstDay + 1;
+                targetMonth = month;
+                targetYear = year;
+            } else {
+                displayDate = i - (firstDay + daysInMonth) + 1;
+                targetMonth = month + 1;
+                targetYear = year;
+                isOtherMonth = true;
+            }
 
-            cell.innerHTML = `
-                <span class="${hijriClass}">${h.day}</span>
-                <span class="date-wrapper">${d}${cutiDotHTML}${obsDotHTML}</span>
-                <span class="${pasaranClass}">${pasaranArr[pasaranIdx]}</span>
-            `;
-            
-            cell.onclick = () => showDetail(d, month, year, dayNames[dayOfWeek], pasaranArr[pasaranIdx], h.day, hijriMonths[h.month], holidayName, cutiName, observanceName, isSunday, birthdayData, anniversaryData);
+            const dateObj = new Date(targetYear, targetMonth, displayDate);
+            const actualDay = dateObj.getDate();
+            const actualMonth = dateObj.getMonth();
+            const actualYear = dateObj.getFullYear();
+
+            if (isOtherMonth) {
+                cell.className = 'day-cell other-month';
+                cell.innerHTML = `<span class="date-wrapper">${actualDay}</span>`;
+            } else {
+                const isToday = isCurrentMonthYear && actualDay === todayDayNum;
+                const h = getHijriDate(dateObj);
+                const dayOfWeek = dateObj.getDay();
+                const isSunday = dayOfWeek === 0;
+                const isFriday = dayOfWeek === 5;
+                
+                const holidayName = getHolidayName(actualDay, actualMonth, actualYear);
+                const isHoliday = !!holidayName;
+                const cutiName = getCutiBersamaName(actualDay, actualMonth, actualYear);
+                const observanceName = getObservanceName(actualDay, actualMonth);
+                const birthdayData = getBirthday(actualDay, actualMonth);
+                const anniversaryData = isAnniversary(actualDay, actualMonth);
+                
+                const refDate = new Date(2026, 0, 1);
+                const diff = Math.floor((dateObj - refDate) / 86400000);
+                const pasaranIdx = (3 + (diff % 5) + 5) % 5;
+                
+                let cellClass = `day-cell ${isToday ? 'today' : ''}`;
+                if (isToday && highlightTriggered) {
+                    cellClass += ' today-jump-animation';
+                }
+
+                if (anniversaryData) cellClass += ' anniversary';
+                else if (birthdayData) cellClass += ' birthday';
+                else if (isSunday || isHoliday) cellClass += ' sunday';
+                else if (isFriday) cellClass += ' friday';
+                
+                cell.className = cellClass;
+                const hijriClass = settings.showHijri ? 'hijri-text' : 'hijri-text hidden-element';
+                const pasaranClass = settings.showPasaran ? 'pasaran-text' : 'pasaran-text hidden-element';
+                
+                const cutiDotHTML = !!cutiName ? `<div class="cuti-dot"></div>` : '';
+                const obsDotHTML = !!observanceName ? `<div class="obs-dot"></div>` : '';
+
+                cell.innerHTML = `
+                    <span class="${hijriClass}">${h.day}</span>
+                    <span class="date-wrapper">${actualDay}${cutiDotHTML}${obsDotHTML}</span>
+                    <span class="${pasaranClass}">${pasaranArr[pasaranIdx]}</span>
+                `;
+                
+                cell.onclick = () => showDetail(actualDay, actualMonth, actualYear, dayNames[dayOfWeek], pasaranArr[pasaranIdx], h.day, hijriMonths[h.month], holidayName, cutiName, observanceName, isSunday, birthdayData, anniversaryData);
+            }
             grid.appendChild(cell);
         }
         renderEventsList(month, year);
+        
+        if (highlightTriggered) {
+            setTimeout(() => { highlightTriggered = false; }, 2000);
+        }
     }
 
     function renderEventsList(month, year) {
         let htmlContent = '';
-        
-        // 0. Anniversary
+        const realToday = new Date();
+        const tDay = realToday.getDate();
+        const tMonth = realToday.getMonth();
+        const tYear = realToday.getFullYear();
+
         if (settings.showFamily && weddingAnniversary.month === month) {
             const annAge = year - weddingAnniversary.year;
             if (annAge > 0) {
+                const isToday = (weddingAnniversary.day === tDay && month === tMonth);
                 htmlContent += `
-                <div class="anniversary-item flex justify-between items-center cursor-pointer hover:scale-[1.02] transition">
+                <div class="anniversary-item ${isToday ? 'highlight-today' : ''} flex justify-between items-center cursor-pointer hover:scale-[1.02] transition">
                     <div class="flex flex-col">
                         <span class="text-[0.7rem] font-bold text-pink-800">${weddingAnniversary.day} ${monthNames[month]}</span>
                         <span class="text-[0.6rem] text-pink-600 font-semibold">Anniversary Pernikahan ❤️</span>
@@ -806,13 +842,13 @@
             }
         }
 
-        // 1. Birthdays
         if (settings.showFamily) {
             const monthBirthdays = familyBirthdays.filter(b => b.month === month).sort((a,b) => a.day - b.day);
             monthBirthdays.forEach(b => {
                 const age = year - b.year;
+                const isToday = (b.day === tDay && month === tMonth);
                 htmlContent += `
-                <div class="birthday-item flex justify-between items-center cursor-pointer hover:scale-[1.02] transition">
+                <div class="birthday-item ${isToday ? 'highlight-today' : ''} flex justify-between items-center cursor-pointer hover:scale-[1.02] transition">
                     <div class="flex flex-col">
                         <span class="text-[0.7rem] font-bold text-amber-800">${b.day} ${monthNames[month]}</span>
                         <span class="text-[0.6rem] text-amber-600 font-semibold truncate w-32">Ulang Tahun ${b.name}</span>
@@ -822,7 +858,6 @@
             });
         }
 
-        // 2. Holidays, Cuti, Observances
         let mergedEvents = [];
         if (holidaysData[year] && holidaysData[year][month]) {
             Object.keys(holidaysData[year][month]).forEach(d => mergedEvents.push({ day: parseInt(d), name: holidaysData[year][month][d], type: 'holiday' }));
@@ -838,9 +873,10 @@
         mergedEvents.forEach(evt => {
             const isObs = evt.type === 'observance';
             const colorClass = isObs ? 'text-blue-600' : 'text-red-600';
+            const isToday = (evt.day === tDay && month === tMonth && year === tYear);
             
             htmlContent += `
-            <div class="${isObs ? 'observance-item' : 'holiday-item'} flex justify-between items-center cursor-pointer hover:scale-[1.02] transition">
+            <div class="${isObs ? 'observance-item' : 'holiday-item'} ${isToday ? 'highlight-today' : ''} flex justify-between items-center cursor-pointer hover:scale-[1.02] transition">
                 <span class="text-[0.7rem] font-bold text-slate-800">${evt.day} ${monthNames[month]}</span>
                 <span class="text-[0.65rem] ${colorClass} font-medium text-right w-2/3 leading-tight">${evt.name}</span>
             </div>`;
@@ -851,8 +887,22 @@
     }
 
     function goToToday() {
-        currentDate = new Date();
-        renderCalendar();
+        const now = new Date();
+        const isSameMonthYear = (currentDate.getFullYear() === now.getFullYear() && currentDate.getMonth() === now.getMonth());
+        
+        highlightTriggered = true; 
+        
+        if (isSameMonthYear) {
+            renderCalendar();
+        } else {
+            const dir = (now.getFullYear() > currentDate.getFullYear() || (now.getFullYear() === now.getFullYear() && now.getMonth() > currentDate.getMonth())) ? 1 : -1;
+            const originalTransition = settings.transitionType;
+            settings.transitionType = 'zoom';
+            changeMonth(dir, now);
+            setTimeout(() => {
+                settings.transitionType = originalTransition;
+            }, 1000);
+        }
     }
 
     function updateQuote() {
@@ -862,8 +912,7 @@
         document.getElementById('quoteDisplayDesktop').textContent = q;
     }
 
-    // --- ANIMATED MONTH CHANGE (FROM RHADZCAL) ---
-    function changeMonth(dir) {
+    function changeMonth(dir, targetDate = null) {
         if (isAnimating) return;
         isAnimating = true;
         const container = document.getElementById('gridContainer');
@@ -886,7 +935,6 @@
                     container.style.transform = 'rotateY(180deg)';
                     break;
                 case 'fade':
-                    // Default opacity is enough
                     break;
             }
         };
@@ -921,8 +969,12 @@
         applyTransitionOut();
         
         setTimeout(() => {
-            currentDate.setDate(1); 
-            currentDate.setMonth(currentDate.getMonth() + dir);
+            if (targetDate) {
+                currentDate = new Date(targetDate);
+            } else {
+                currentDate.setDate(1); 
+                currentDate.setMonth(currentDate.getMonth() + dir);
+            }
             renderCalendar();
             updateQuote();
             
@@ -935,7 +987,6 @@
         }, 250);
     }
 
-    // --- MODAL SETTINGS & SELECTORS ---
     function openSettings() {
         const body = document.getElementById('modalBody');
         const title = document.getElementById('modalTitle');
@@ -954,7 +1005,6 @@
             makeToggle('Tampilkan Peringatan', 'showObservances') +
             makeToggle('Tampilkan Keluarga', 'showFamily');
             
-        // Add Transition Selector
         html += `
             <div class="pt-2">
                 <span class="block font-bold text-[0.65rem] text-slate-400 uppercase tracking-widest mb-2 px-1">Efek Transisi Bulan</span>
@@ -978,7 +1028,6 @@
         renderCalendar(); 
     }
 
-    // --- SCROLLER UTILS ---
     function createScrollerItem(text, value, isActive) {
         const item = document.createElement('div');
         item.className = `scroller-item ${isActive ? 'active' : ''}`;
@@ -1007,7 +1056,6 @@
         };
     }
 
-    // --- SELECTORS ---
     function openMonthSelector() {
         const body = document.getElementById('modalBody');
         const title = document.getElementById('modalTitle');
@@ -1095,7 +1143,9 @@
         }
     }
 
-    // --- DETAIL MODAL ---
+    /**
+     * REVISI: Urutan prioritas rincian hari (Keluarga Utama)
+     */
     function showDetail(d, m, y, dayName, pasaranName, hDate, hMonth, holiday, cutiName, observanceName, isSunday, birthdayData, anniversaryData) {
         const body = document.getElementById('modalBody');
         const title = document.getElementById('modalTitle');
@@ -1111,9 +1161,8 @@
         else if (anniversaryData) { dateColor = "text-pink-600"; subColor = "text-pink-400"; }
 
         let specialBadge = '';
-        if (holiday) specialBadge += `<div class="mt-2 px-3 py-1 bg-red-100 text-red-600 rounded-full font-bold text-[0.65rem] uppercase tracking-wide border border-red-200 inline-block mx-1 mb-1">${holiday}</div>`;
-        if (cutiName) specialBadge += `<div class="mt-2 px-3 py-1 bg-red-50 text-red-500 rounded-full font-bold text-[0.65rem] uppercase tracking-wide border border-red-200 inline-block mx-1 mb-1">${cutiName}</div>`;
-        if (observanceName) specialBadge += `<div class="mt-2 px-3 py-1 bg-blue-50 text-blue-500 rounded-full font-bold text-[0.65rem] uppercase tracking-wide border border-blue-200 inline-block mx-1 mb-1">${observanceName}</div>`;
+        
+        // REVISI: FAMILY DATA DITARUH PALING ATAS
         if (birthdayData) {
             const age = y - birthdayData.year;
             specialBadge += `<div class="mt-2 px-3 py-1 bg-amber-100 text-amber-700 rounded-full font-bold text-[0.65rem] uppercase tracking-wide border border-amber-200 inline-block mx-1 mb-1">🎉 ULTAH ${birthdayData.name} KE-${age}</div>`;
@@ -1122,6 +1171,11 @@
             const annAge = y - weddingAnniversary.year;
             specialBadge += `<div class="mt-2 px-3 py-1 bg-pink-100 text-pink-700 rounded-full font-bold text-[0.65rem] uppercase tracking-wide border border-pink-200 inline-block mx-1 mb-1">💍 ANNIVERSARY KE-${annAge}</div>`;
         }
+
+        // Baru data hari umum
+        if (holiday) specialBadge += `<div class="mt-2 px-3 py-1 bg-red-100 text-red-600 rounded-full font-bold text-[0.65rem] uppercase tracking-wide border border-red-200 inline-block mx-1 mb-1">${holiday}</div>`;
+        if (cutiName) specialBadge += `<div class="mt-2 px-3 py-1 bg-red-50 text-red-500 rounded-full font-bold text-[0.65rem] uppercase tracking-wide border border-red-200 inline-block mx-1 mb-1">${cutiName}</div>`;
+        if (observanceName) specialBadge += `<div class="mt-2 px-3 py-1 bg-blue-50 text-blue-500 rounded-full font-bold text-[0.65rem] uppercase tracking-wide border border-blue-200 inline-block mx-1 mb-1">${observanceName}</div>`;
 
         const pasaranText = settings.showPasaran ? pasaranName : '';
         const hijriTextDisplay = settings.showHijri ? `${hDate} ${hMonth} 1447H` : '';
